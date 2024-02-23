@@ -4,6 +4,7 @@
       <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
         Login
       </button>
+      <Icon name="uil:github" color="black" />
     </div>
     <div class="text-center">
       <h1 class="text-6xl font-bold">
