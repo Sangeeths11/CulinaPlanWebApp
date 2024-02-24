@@ -1,3 +1,30 @@
+<script setup lang="ts">
+const supabase = useSupabaseClient();
+const router = useRouter();
+
+const email = ref('');
+const password = ref('');
+const confirmPassword = ref('');
+
+const register = async () => {
+  if (password.value !== confirmPassword.value) {
+    console.log("Passwords do not match.");
+    return;
+  }
+
+  const { user, error } = await supabase.auth.signUp({
+    email: email.value,
+    password: password.value,
+  });
+
+  if (error) {
+    console.log(error.message);
+  } else {
+    console.log("Registration successful, redirecting...");
+    router.push('/login');
+  }
+};
+</script>
 <template>
   <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
     <div class="bg-white p-6 rounded shadow-md w-full max-w-md">
