@@ -1,3 +1,9 @@
+<script setup lang="ts">
+definePageMeta({
+  middleware: ['auth-index']
+})
+
+</script>
 <template>
   <div class="flex flex-col items-center justify-center min-h-screen relative">
     <div class="absolute top-0 right-0 p-5">
@@ -16,9 +22,7 @@
   <NuxtPage/>
 </template>
 
-<script lang="ts">
 
-</script>
 
 <style>
 

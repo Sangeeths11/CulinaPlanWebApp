@@ -12,5 +12,8 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
+  supabase: {
+    redirect: false
+  },
   modules: ['nuxt-icon','@nuxtjs/supabase'],
 })
