@@ -1,3 +1,21 @@
+<script setup lang="ts">
+const supabase = useSupabaseClient()
+const router = useRouter()
+const login = async () => {
+  const { error } = await supabase.auth.signInWithPassword(
+    {
+        email: email.value,
+        password: password.value,
+    });
+
+    if (error) {
+      console.log(error.message);
+    } else {
+      router.push('/home');
+    }
+}
+</script>
+
 <template>
   <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
     <div class="bg-white p-6 rounded shadow-md w-full max-w-md">
@@ -54,8 +72,7 @@
 </template>
 
 
-<script lang="ts">
-</script>
+
 
 <style>
 
