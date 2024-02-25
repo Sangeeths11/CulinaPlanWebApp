@@ -2,8 +2,8 @@
 definePageMeta({
   middleware: ['auth-index']
 })
-
 </script>
+
 <template>
   <div>
     <NetworkBackground/>
@@ -11,10 +11,4 @@ definePageMeta({
 </template>
 
 <style>
-</style>
-
-
-
-<style>
-
 </style>
