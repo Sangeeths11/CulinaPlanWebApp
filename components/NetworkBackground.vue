@@ -64,7 +64,6 @@ export default defineComponent({
         if (ctx) {
           ctx.clearRect(0, 0, canvas.value.width, canvas.value.height);
 
-          // Anpassung der Linien-Transparenz
           ctx.strokeStyle = 'rgb(59 130 246)';
 
           nodes.forEach(node => {
@@ -79,7 +78,6 @@ export default defineComponent({
             });
           });
 
-          // Anpassung der Knoten-Transparenz
           ctx.fillStyle = 'rgba(220 38 38, 0.5)';
 
           nodes.forEach(node => {
