@@ -1,11 +1,11 @@
 <template>
-  <div class="relative h-screen w-screen">
+  <div class="relative h-screen w-screen color" >
     <canvas ref="canvas" class="w-full h-full"></canvas>
     <div class="absolute inset-0 flex flex-col items-center justify-center text-white">
       <div class="absolute top-0 right-0 p-5">
         <LoginButton/>
       </div>
-      <div class="text-center text-stone-950">
+      <div class="text-center">
         <h1 class="text-6xl font-bold">
           Welcome to CulinaPlan
         </h1>
@@ -64,7 +64,8 @@ export default defineComponent({
         if (ctx) {
           ctx.clearRect(0, 0, canvas.value.width, canvas.value.height);
 
-          ctx.strokeStyle = 'rgb(59 130 246)';
+          // Linien
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
 
           nodes.forEach(node => {
             nodes.forEach(otherNode => {
@@ -78,7 +79,8 @@ export default defineComponent({
             });
           });
 
-          ctx.fillStyle = 'rgba(220 38 38, 0.5)';
+          // Kreise
+          ctx.fillStyle = 'rgba(0, 120, 255, 0.5)'; 
 
           nodes.forEach(node => {
             ctx.beginPath();
@@ -88,6 +90,7 @@ export default defineComponent({
         }
       }
     };
+
 
 
     const updateNodePositions = () => {
@@ -122,5 +125,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
+  .color {
+    background-color: #0B0C10;
+  }
 </style>
