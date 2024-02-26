@@ -41,7 +41,9 @@ const recipes = ref<Recipe[]>([
     <div>
       <h1 class="text-3xl font-bold p-5">Recipe overview</h1>
     </div>
-
+    <div class="p-5">
+      <FilterBar/>
+    </div>
     <div class="p-5 grid grid-cols-1 md:grid-cols-3 gap-4">
       <div v-for="recipe in recipes" :key="recipe.id" class="bg-white rounded-lg shadow-md overflow-hidden">
         <img :src="recipe.image" alt="Gerichtsbild" class="w-full h-32 object-cover">
