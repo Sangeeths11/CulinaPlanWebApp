@@ -6,8 +6,8 @@
 </template>
 
 <script setup lang="ts">
-  const router = useRouter()
-  function references(event) {
-    router.push('/login')
-  }
+const router = useRouter()
+function references(event) {
+  router.push('/login')
+}
 </script>

@@ -14,7 +14,7 @@ const login = async () => {
     if (error) {
       console.log(error.message);
     } else {
-      router.push('/index');
+      router.push('/');
     }
 }
 </script>
