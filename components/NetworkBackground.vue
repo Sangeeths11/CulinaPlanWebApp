@@ -58,6 +58,8 @@ export default defineComponent({
       }
     };
 
+    
+    
     const drawNodes = () => {
       if (canvas.value) {
         const ctx = canvas.value.getContext('2d');

@@ -21,7 +21,6 @@
             <option v-for="allergy in allergies" :key="allergy" :value="allergy">{{ allergy }}</option>
           </select>
         </div>
-        <!-- Fügen Sie hier weitere Filteroptionen mit Labels hinzu -->
       </div>
     </transition>
   </div>
