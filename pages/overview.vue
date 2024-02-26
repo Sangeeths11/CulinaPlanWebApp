@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const router = useRouter();
 definePageMeta({
   title: 'Rezepte Übersicht',
   middleware: ['auth-index']
@@ -28,6 +29,9 @@ const recipes = ref<Recipe[]>([
     tags: ['vegan', 'glutenfrei']
   },
 ]);
+const openCreateRecipeModal = () => {
+  router.push('/createRecipe');
+};
 </script>
 
 <template>
@@ -60,6 +64,13 @@ const recipes = ref<Recipe[]>([
           </div>
         </div>
       </div>
+    </div>
+    <div class="fixed bottom-10 right-10 flex flex-col items-center">
+      <button @click="openCreateRecipeModal" class="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-full shadow-lg transition duration-300 flex items-center justify-center group">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
+        </svg>
+      </button>
     </div>
   </div>
 </template>
