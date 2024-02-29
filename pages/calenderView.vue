@@ -1,6 +1,5 @@
 <script setup lang="ts">
   const date = ref(new Date())
-
   const attrs = ref([
     {
       key: 'today',
