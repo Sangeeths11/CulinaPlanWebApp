@@ -82,7 +82,7 @@ export default defineComponent({
           });
 
           // Kreise
-          ctx.fillStyle = 'rgba(0, 120, 255, 0.5)'; 
+          ctx.fillStyle = 'rgba(0, 230, 255, 0.5)'; 
 
           nodes.forEach(node => {
             ctx.beginPath();
@@ -92,8 +92,6 @@ export default defineComponent({
         }
       }
     };
-
-
 
     const updateNodePositions = () => {
       nodes.forEach(node => {
