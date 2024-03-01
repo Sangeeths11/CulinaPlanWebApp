@@ -23,11 +23,32 @@ const { chatCompletion } = useChatgpt()
 const chatTree = ref([])
 const inputData = ref('')
 
+inputData.value = `
+Give me the recipe for sushi. Please make sure that you indicate the cost and quantity of each product. It is important that you give me this information in a nicely structured way.
+The output should be given in JSON format, everything else will not be accepted:
+
+{
+ "name": "Name of recipe",
+ "Proteins": "in grams",
+ "Carbohydrates": "in grams",
+ "ingredients": [
+  {
+    "name": "",
+    "cost": "in CHF",
+    "amount": "in number"
+  },
+  {
+    etc.
+  }
+  ]
+}
+`
+
 async function sendMessage() {
   try {
     const message = {
       role: 'user',
-      content: `${inputData.value}`,
+      content: inputData.value,
     }
 
     chatTree.value.push(message)
