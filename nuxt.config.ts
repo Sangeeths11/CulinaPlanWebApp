@@ -12,8 +12,11 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
+  chatgpt: {
+    apiKey: process.env.CHATGPT_API_KEY,
+  },
   supabase: {
     redirect: false
   },
-  modules: ['nuxt-icon','@nuxtjs/supabase','@samk-dev/nuxt-vcalendar'],
+  modules: ['nuxt-icon','@nuxtjs/supabase','@samk-dev/nuxt-vcalendar',"nuxt-chatgpt"],
 })
