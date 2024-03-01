@@ -8,7 +8,7 @@
     </div>
 
     <transition name="fade">
-      <div v-if="showAdvancedSearch" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div v-if="showAdvancedSearch" class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div class="flex flex-col">
           <label for="category-select" class="mb-2 text-sm font-medium text-gray-700">Kategorie</label>
           <select id="category-select" v-model="selectedCategory" class="border p-2 rounded transition duration-300 hover:border-blue-500">
@@ -19,6 +19,12 @@
           <label for="allergy-select" class="mb-2 text-sm font-medium text-gray-700">Allergie</label>
           <select id="allergy-select" v-model="selectedAllergy" class="border p-2 rounded transition duration-300 hover:border-blue-500">
             <option v-for="allergy in allergies" :key="allergy" :value="allergy">{{ allergy }}</option>
+          </select>
+        </div>
+        <div class="flex flex-col">
+          <label for="allergy-select" class="mb-2 text-sm font-medium text-gray-700">Ernährungstyp</label>
+          <select id="allergy-select" v-model="selectedTyp" class="border p-2 rounded transition duration-300 hover:border-blue-500">
+            <option v-for="typ in types" :key="typ" :value="typ">{{ typ }}</option>
           </select>
         </div>
       </div>
@@ -33,6 +39,8 @@ const selectedCategory = ref('');
 const categories = ['Alle', 'Frühstück', 'Mittagessen', 'Abendessen', 'Snacks'];
 const selectedAllergy = ref('');
 const allergies = ['Keine', 'Nüsse', 'Gluten', 'Laktose'];
+const selectedTyp = ref('');
+const types = ['Fleischhaltig','Vegetarisch'];
 
 const toggleAdvancedSearch = () => {
   showAdvancedSearch.value = !showAdvancedSearch.value;

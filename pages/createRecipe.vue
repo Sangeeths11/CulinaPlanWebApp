@@ -22,33 +22,17 @@
         </div> 
       </div>
       <div class="mb-4">
+        <label for="recipeName" class="block text-gray-700 text-sm font-bold mb-2">Rezeptname</label>
+        <input type="text" id="recipeName" v-model="recipeName" @keyup.enter="generateRecipe" placeholder="Geben Sie einen Rezeptnamen ein und drücken Sie Enter" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+      </div>
+
+      <div class="mb-4">
         <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
           Beschreibung
         </label>
         <textarea id="description" v-model="recipe.description" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"></textarea>
       </div>
       <div class="flex flex-wrap -mx-2">
-        <div class="w-full px-2 mb-4 md:mb-0">
-          <label class="block text-gray-700 text-sm font-bold mb-2">
-            Einkaufsliste Zutaten
-          </label>
-          <div v-for="(ingredient, index) in recipe.ingredients" :key="index" class="flex flex-wrap items-center mb-2">
-            <input type="text" v-model="ingredient.name" placeholder="Zutat" class="border rounded py-2 px-3 text-gray-700 mr-2 mb-2 flex-grow w-full md:w-auto">
-            <input type="number" v-model="ingredient.quantity" placeholder="Anzahl" class="border rounded py-2 px-3 text-gray-700 mr-2 mb-2 flex-grow w-full md:w-auto">
-            <input type="number" v-model="ingredient.price" placeholder="Preis (CHF)" class="border rounded py-2 px-3 text-gray-700 mr-2 mb-2 flex-grow w-full md:w-auto">
-            <div class="flex space-x-1 mb-2 w-full md:w-auto">
-              <button type="button" @click="removeIngredient(index)" class="flex justify-center items-center h-10 w-full md:w-10 bg-red-500 text-white rounded">
-                <Icon name="pajamas:remove" class="h-6 w-6" />
-              </button>
-              <button type="button" @click="addIngredient" class="flex justify-center items-center h-10 w-full md:w-10 bg-green-500 text-white rounded">
-                <Icon name="material-symbols:add" class="h-6 w-6" />
-              </button>
-            </div>
-          </div>
-          <div class="mb-6">
-            <p class="text-gray-700 text-sm font-bold">Gesamtkosten: {{ calculateTotalCost.toFixed(2) }} CHF</p>
-          </div>
-        </div>
         <div class="w-full px-2">
           <div class="flex flex-wrap -m-2">
             <div class="w-full md:w-1/2 lg:w-1/3 px-2 mb-4">
@@ -83,9 +67,32 @@
                   <label :for="'typ-' + index" class="text-gray-700 ml-2">{{ typ }}</label>
                 </div>
               </div>
+              <!-- Datum auswählen -->
             </div>
           </div>
         </div>
+        <div class="w-full px-2 mb-4 md:mb-0">
+          <label class="block text-gray-700 text-sm font-bold mb-2">
+            Einkaufsliste Zutaten
+          </label>
+          <div v-for="(ingredient, index) in recipe.ingredients" :key="index" class="flex flex-wrap items-center mb-2">
+            <input type="text" v-model="ingredient.name" placeholder="Zutat" class="border rounded py-2 px-3 text-gray-700 mr-2 mb-2 flex-grow w-full md:w-auto">
+            <input type="number" v-model="ingredient.quantity" placeholder="Anzahl" class="border rounded py-2 px-3 text-gray-700 mr-2 mb-2 flex-grow w-full md:w-auto">
+            <input type="number" v-model="ingredient.price" placeholder="Preis (CHF)" class="border rounded py-2 px-3 text-gray-700 mr-2 mb-2 flex-grow w-full md:w-auto">
+            <div class="flex space-x-1 mb-2 w-full md:w-auto">
+              <button type="button" @click="removeIngredient(index)" class="flex justify-center items-center h-10 w-full md:w-10 bg-red-500 text-white rounded">
+                <Icon name="pajamas:remove" class="h-6 w-6" />
+              </button>
+              <button type="button" @click="addIngredient" class="flex justify-center items-center h-10 w-full md:w-10 bg-green-500 text-white rounded">
+                <Icon name="material-symbols:add" class="h-6 w-6" />
+              </button>
+            </div>
+          </div>
+          <div class="mb-6">
+            <p class="text-gray-700 text-sm font-bold">Gesamtkosten: {{ calculateTotalCost.toFixed(2) }} CHF</p>
+          </div>
+        </div>
+
       </div>
       <div class="flex items-center justify-between mt-6">
         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
@@ -94,9 +101,25 @@
       </div>
     </form>
   </div>
+
 </template>
 
 <script setup lang="ts">
+
+const recipeName = ref('');
+const generatedRecipe = ref('');
+
+// Simulierte Funktion, die eine Rezepterstellungshilfe generiert
+const generateRecipe = () => {
+  if (recipeName.value.trim() !== '') {
+    // Simulierte Antwort von ChatGPT basierend auf dem eingegebenen Rezeptnamen
+    generatedRecipe.value = `Hier sind einige Tipps zur Erstellung von "${recipeName.value}": (Fügen Sie hier spezifische Tipps oder Schritte basierend auf dem Rezeptnamen ein)`;
+    alert('Rezeptvorschlag wurde generiert.');
+  } else {
+    alert('Bitte geben Sie zuerst einen Rezeptnamen ein.');
+  }
+};
+
 const selectedTyp = ref([]);
 
 watchEffect(() => {
