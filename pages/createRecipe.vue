@@ -79,7 +79,7 @@
               </label>
               <div class="flex flex-wrap">
                 <div v-for="(typ, index) in types" :key="index" class="w-1/2 mb-2">
-                  <input type="checkbox" :id="'category-' + index" v-model="selectedTyp" :value="typ">
+                  <input type="checkbox" :id="'category-' + index" v-model="selectedTyp" :value="typ" @change="handleNutritionTypeChange(typ)">
                   <label :for="'typ-' + index" class="text-gray-700 ml-2">{{ typ }}</label>
                 </div>
               </div>
@@ -97,6 +97,11 @@
 </template>
 
 <script setup lang="ts">
+const selectedTyp = ref([]);
+
+watchEffect(() => {
+  console.log(selectedTyp.value.length);
+});
 
 interface Ingredient {
   name: string;
@@ -119,14 +124,17 @@ const categories = ['Frühstück', 'Mittagessen', 'Abendessen', 'Snack'];
 const types = ['Fleischhaltig','Vegetarisch'];
 const selectedAllergies = ref([]);
 const selectedCategories = ref([]);
-const selectedTyp = ref([]);
+
 
 const addIngredient = () => {
   recipe.value.ingredients.push({ name: '', price: 0 });
 };
 
 const removeIngredient = (index: number) => {
-  recipe.value.ingredients.splice(index, 1);
+  if (recipe.value.ingredients.length > 1)
+  {
+    recipe.value.ingredients.splice(index, 1);
+  }
 };
 
 const calculateTotalCost = computed(() => {
@@ -143,6 +151,14 @@ const handleImageUpload = (event) => {
       alert('Bild erfolgreich hochgeladen');
     };
     reader.readAsDataURL(file);
+  }
+};
+
+const handleNutritionTypeChange = (selectedType) => {
+  if (selectedType === 'Fleischhaltig') {
+    selectedTyp.value = ['Fleischhaltig'];
+  } else if (selectedType === 'Vegetarisch') {
+    selectedTyp.value = ['Vegetarisch'];
   }
 };
 
