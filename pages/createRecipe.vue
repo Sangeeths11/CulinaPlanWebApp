@@ -23,7 +23,7 @@
       </div>
       <div class="mb-4">
         <label for="recipeName" class="block text-gray-700 text-sm font-bold mb-2">Rezeptname</label>
-        <input type="text" id="recipeName" v-model="recipeName" @keyup.enter="generateRecipe" placeholder="Geben Sie einen Rezeptnamen ein und drücken Sie Enter" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        <input type="text" id="recipeName" v-model="recipeName" v-on:keyup.enter="generateRecipe" placeholder="Geben Sie einen Rezeptnamen ein und drücken Sie Enter" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
       </div>
 
       <div class="mb-4">
@@ -100,23 +100,72 @@
         </button>
       </div>
     </form>
+    <div v-if="generatedRecipe" class="bg-white p-5 rounded-lg shadow">
+      <h2 class="text-2xl font-bold mb-2">AI generierter Rezept zu {{ generatedRecipe.name }}</h2>
+      <div v-if="generatedRecipe.Proteins || generatedRecipe.Carbohydrates">
+        <h3 class="font-semibold">Nährwerte:</h3>
+        <p v-if="generatedRecipe.Proteins">Proteine: {{ generatedRecipe.Proteins }}</p>
+        <p v-if="generatedRecipe.Carbohydrates">Kohlenhydrate: {{ generatedRecipe.Carbohydrates }}</p>
+      </div>
+      <div v-if="generatedRecipe.ingredients && generatedRecipe.ingredients.length > 0">
+        <h3 class="font-semibold mt-4 mb-2">Zutaten:</h3>
+        <ul>
+          <li v-for="(ingredient, index) in generatedRecipe.ingredients" :key="index">
+            {{ ingredient.name }} - {{ ingredient.amount }} ({{ ingredient.cost }})
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
-
 </template>
 
 <script setup lang="ts">
-
+const { chatCompletion } = useChatgpt()
 const recipeName = ref('');
 const generatedRecipe = ref('');
 
-// Simulierte Funktion, die eine Rezepterstellungshilfe generiert
-const generateRecipe = () => {
+
+const generateRecipe = async () => {
+  
   if (recipeName.value.trim() !== '') {
-    // Simulierte Antwort von ChatGPT basierend auf dem eingegebenen Rezeptnamen
-    generatedRecipe.value = `Hier sind einige Tipps zur Erstellung von "${recipeName.value}": (Fügen Sie hier spezifische Tipps oder Schritte basierend auf dem Rezeptnamen ein)`;
-    alert('Rezeptvorschlag wurde generiert.');
+    try {
+      const prompt = `
+        Give me the recipe for ${recipeName.value}. Please make sure that you indicate the cost and quantity of each product. It is important that you give me this information in a nicely structured way.
+        The output should be given in JSON format, everything else will not be accepted:
+
+        {
+        "name": "Name of recipe",
+        "Proteins": "in grams",
+        "Carbohydrates": "in grams",
+        "ingredients": [
+          {
+            "name": "",
+            "cost": "in CHF",
+            "amount": "in number"
+          },
+          {
+            etc.
+          }
+          ]
+        }
+        `
+      const chatTree = [
+        {
+          role: 'user',
+          content: prompt,
+        }
+      ]
+      const response = await chatCompletion(chatTree, 'gpt-3.5-turbo-0301')
+
+      const responseData = JSON.parse(response[0].message.content);
+      generatedRecipe.value = responseData;
+      
+      alert('Rezeptvorschlag wurde generiert.')
+    } catch (error) {
+      alert('Fehler beim Generieren des Rezeptvorschlags: ' + error.message)
+    }
   } else {
-    alert('Bitte geben Sie zuerst einen Rezeptnamen ein.');
+    alert('Bitte geben Sie zuerst einen Rezeptnamen ein.')
   }
 };
 
