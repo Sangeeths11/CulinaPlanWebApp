@@ -17,7 +17,7 @@
     "vue3-apexcharts": "^1.5.2"
   },
   "devDependencies": {
-    "@nuxtjs/supabase": "^1.1.6",
+    "@nuxtjs/supabase": "^1.1.7",
     "@samk-dev/nuxt-vcalendar": "^1.0.2",
     "autoprefixer": "^10.4.18",
     "nuxt-chatgpt": "^0.2.3",
