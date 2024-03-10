@@ -62,14 +62,16 @@ const openCreateRecipeModal = () => {
 
     <div class="flex justify-between items-center p-5">
       <button @click="toggleSideNav" class="p-2 bg-blue-500 text-white rounded-md">
-        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-          <path fill-rule="evenodd" d="M3 9h14a1 1 0 0 1 0 2H3a1 1 0 0 1 0-2zm0-4h14a1 1 0 0 1 0 2H3a1 1 0 0 1 0-2zm0 8h14a1 1 0 0 1 0 2H3a1 1 0 0 1 0-2z" clip-rule="evenodd"></path>
-        </svg>
+        <Icon name="heroicons-solid:menu" class="h-6 w-6" />
       </button>
-      <h1 class="text-3xl font-bold">Recipe overview</h1>
-      <button class="p-2 bg-blue-500 text-white rounded-md">
-        <img src="assets/spoon.png" alt="Profil" class="h-8 w-8 rounded-full">
-      </button>
+      
+      <div class="flex items-center space-x-2">
+        <span class="text-gray-600">Benutzername</span>
+        <img src="assets/spoon.png" alt="Profil" class="h-10 w-10 rounded-full">
+      </div>
+    </div>
+    <div class="p-5">
+      <h1 class="text-3xl font-bold mb-2">Rezepte Übersicht</h1>
     </div>
 
     <div class="p-5">
