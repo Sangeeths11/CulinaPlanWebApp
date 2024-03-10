@@ -1,37 +1,48 @@
 <template>
-  <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" @click.self="close">
-    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-      <div class="mt-3 text-center">
-        <h3 class="text-lg leading-6 font-medium text-gray-900">Rezept zuweisen</h3>
-        <div class="mt-2">
-          <label for="recipeName" class="block text-gray-700 text-sm font-bold mb-2">
-            Datum auswählen:
-            <input type="date" v-model="selectedDate" class="mt-2 p-2 border rounded">
-          </label>
-          
-          <label for="recipeName" class="block text-gray-700 text-sm font-bold mb-2">
-            Morgen Rezeptname eingeben:
-            <input type="text" placeholder="Rezeptname" v-model="morgenRecipeName" class="mt-2 p-2 border rounded">
-          </label>
-
-          <label for="recipeName" class="block text-gray-700 text-sm font-bold mb-2">
-            Mittag Rezeptname eingeben:
-            <input type="text" placeholder="Rezeptname" v-model="lunchRecipeName" class="mt-2 p-2 border rounded">
-          </label>
-
-          <label for="recipeName" class="block text-gray-700 text-sm font-bold mb-2">
-            Abend Rezeptname eingeben:
-            <input type="text" placeholder="Rezeptname" v-model="eveningRecipeName" class="mt-2 p-2 border rounded">
-          </label>
-
-          <label for="recipeName" class="block text-gray-700 text-sm font-bold mb-2">
-            Snack Rezeptname eingeben:
-            <input type="text" placeholder="Rezeptname" v-model="snackRecipeName" class="mt-2 p-2 border rounded">
-          </label>
+  <div class="fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50 overflow-y-auto">
+    <div class="bg-white rounded-md shadow-lg w-96">
+      <div class="p-6">
+        <div class="">
+          <button @click="closeModal" class="text-gray-600">
+            <Icon name="material-symbols:close"/>
+          </button>
         </div>
-        <div class="items-center px-4 py-3">
+        <h3 class="text-lg font-semibold mb-4 text-gray-800">Rezept zuweisen</h3>
+        <div class="mb-4">
+          <label for="recipeDate" class="block text-sm font-medium text-gray-700 mb-1">Datum auswählen:</label>
+          <input type="date" v-model="selectedDate" id="recipeDate" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+        </div>
+        <div class="mb-4">
+          <label for="morgenRecipe" class="block text-sm font-medium text-gray-700 mb-1">Morgen:</label>
+          <select v-model="morgenRecipe" id="morgenRecipe" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            <option disabled value="">Bitte auswählen</option>
+            <option v-for="recipe in recipes" :key="recipe.id" :value="recipe.name">{{ recipe.name }}</option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label for="lunchRecipe" class="block text-sm font-medium text-gray-700 mb-1">Mittag:</label>
+          <select v-model="lunchRecipe" id="lunchRecipe" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            <option disabled value="">Bitte auswählen</option>
+            <option v-for="recipe in recipes" :key="recipe.id" :value="recipe.name">{{ recipe.name }}</option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label for="eveningRecipe" class="block text-sm font-medium text-gray-700 mb-1">Abend:</label>
+          <select v-model="eveningRecipe" id="eveningRecipe" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            <option disabled value="">Bitte auswählen</option>
+            <option v-for="recipe in recipes" :key="recipe.id" :value="recipe.name">{{ recipe.name }}</option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label for="snackRecipe" class="block text-sm font-medium text-gray-700 mb-1">Snack:</label>
+          <select v-model="snackRecipe" id="snackRecipe" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            <option disabled value="">Bitte auswählen</option>
+            <option v-for="recipe in recipes" :key="recipe.id" :value="recipe.name">{{ recipe.name }}</option>
+          </select>
+        </div>
+        <div class="flex justify-end">
           <button
-            class="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             @click="assignRecipe"
           >
             Zuweisen
@@ -43,23 +54,47 @@
 </template>
 
 <script setup lang="ts">
+import { defineEmits, ref } from 'vue';
+
 const emits = defineEmits(['close', 'assign']);
 const selectedDate = ref('');
-const recipeName = ref('');
+const morgenRecipe = ref('');
+const lunchRecipe = ref('');
+const eveningRecipe = ref('');
+const snackRecipe = ref('');
 
-const close = () => {
+const closeModal  = () => {
   emits('close');
 };
 
 const assignRecipe = () => {
-  if (selectedDate.value && recipeName.value) {
-    emits('assign', selectedDate.value, recipeName.value);
-    recipeName.value = '';
+  if (selectedDate.value && morgenRecipe.value && lunchRecipe.value && eveningRecipe.value && snackRecipe.value) {
+    emits('assign', selectedDate.value, morgenRecipe.value, lunchRecipe.value, eveningRecipe.value, snackRecipe.value);
     selectedDate.value = '';
+    morgenRecipe.value = '';
+    lunchRecipe.value = '';
+    eveningRecipe.value = '';
+    snackRecipe.value = '';
   }
 };
+
+// Dummy data for recipes
+const recipes = [
+  { id: 1, name: 'Rezept 1' },
+  { id: 2, name: 'Rezept 2' },
+  { id: 3, name: 'Rezept 3' },
+];
 </script>
 
-<style>
-/* Tailwind CSS ist bereits für Styling aktiv */
+<style scoped>
+/* Additional styling for improved appearance */
+input:focus,
+select:focus {
+  border-color: #4a90e2;
+  outline: none;
+}
+
+button:hover {
+  background-color: #4a90e2;
+}
 </style>
