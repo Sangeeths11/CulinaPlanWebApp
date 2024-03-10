@@ -1,73 +1,101 @@
 <template>
-    <div>
-      <ClientOnly>
-        <apexchart
-          :key="series"
-          height="400"
-          width="100%"
-          :options="options"
-          :series="series"
-        ></apexchart>
-      </ClientOnly>
-      <button
-        class="
-          bg-blue-500
-          hover:bg-blue-700
-          text-white
-          font-bold
-          py-2
-          px-4
-          ml-8
-          rounded
-        "
-        @click="updateChart"
-      >
-        Change
-      </button>
+  <div class="min-h-screen bg-gray-100 p-4 md:p-10">
+    <h1 class="text-3xl font-bold mb-6">Dashboard</h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+      <div v-for="(chart, index) in charts" :key="index" class="rounded-lg overflow-hidden border border-gray-200">
+        <h2 class="bg-blue-500 text-white text-lg font-bold p-4">{{ chart.title }}</h2>
+        <apexchart :key="'chart-' + index" height="300" :options="chart.options" :series="chart.series"></apexchart>
+      </div>
     </div>
-  </template>
-  <script setup lang="ts">
-  const options = ref({
-    chart: {
-      type: 'bar',
-    },
-    plotOptions: {
-      bar: {
-        borderRadius: 10,
-        borderRadiusApplication: 'around',
+  </div>
+</template>
+
+<script setup lang="ts">
+
+const charts = reactive([
+  {
+    title: 'Chart 1',
+    options: {
+      chart: {
+        type: 'bar',
       },
-    },
-  });
-  const series = ref([
-    {
-      name: 'Score',
-      data: [],
-    },
-  ]);
-  const updateChart = () => {
-    //generate array of random numbers of length 10
-    const data = Array.from({ length: 10 }, () =>
-      Math.floor(Math.random() * 100)
-    );
-    options.value = {
-      ...options.value,
+      plotOptions: {
+        bar: {
+          borderRadius: 10,
+          borderRadiusApplication: 'around',
+        },
+      },
       xaxis: {
         categories: Array.from(
           { length: 10 },
           (_, i) => new Date().getFullYear() - i
-        ), // array of last 10 years
+        ),
       },
-    };
-    series.value = [
+    },
+    series: [
       {
         name: 'Score',
-        data: data,
+        data: Array.from({ length: 10 }, () => Math.floor(Math.random() * 100)),
       },
-    ];
-  };
-  onMounted(() => {
-    //generate array of random numbers of length 10
-    updateChart();
+    ],
+  },
+  {
+    title: 'Chart 2',
+    options: {
+      chart: {
+        type: 'line',
+      },
+      xaxis: {
+        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+      },
+    },
+    series: [
+      {
+        name: 'Sales',
+        data: Array.from({ length: 10 }, () => Math.floor(Math.random() * 1000)),
+      },
+    ],
+  },
+  {
+    title: 'Chart 3',
+    options: {
+      chart: {
+        type: 'donut',
+      },
+      labels: ['Team A', 'Team B', 'Team C'],
+    },
+    series: [30, 40, 30],
+  },
+  {
+    title: 'Chart 4',
+    options: {
+      chart: {
+        type: 'pie',
+      },
+      labels: ['Product 1', 'Product 2', 'Product 3', 'Product 4'],
+    },
+    series: [300, 500, 200, 400],
+  },
+]);
+
+const updateCharts = () => {
+  charts.forEach(chart => {
+    if (chart.options.chart.type === 'bar' || chart.options.chart.type === 'line') {
+      chart.series = [{
+        name: 'Score',
+        data: Array.from({ length: 10 }, () => Math.floor(Math.random() * 100)),
+      }];
+    } else if (chart.options.chart.type === 'donut' || chart.options.chart.type === 'pie') {
+      chart.series = [30, 40, 30];
+    }
   });
-  </script>
-  
+};
+
+onMounted(() => {
+  updateCharts();
+});
+</script>
+
+<style scoped>
+/* Add custom styling here */
+</style>
