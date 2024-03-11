@@ -259,8 +259,7 @@ async function submitRecipeToSupabase(){
         name: ingredient.name,
         price: ingredient.price,
         quantity: ingredient.quantity,
-        recepie_id: recipeData[0].id,
-        user_id: user.value.id
+        recepie_id: recipeData[0].id
       }));
       
       console.log(ingredientsWithRecipeId);
