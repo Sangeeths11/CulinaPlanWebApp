@@ -214,15 +214,27 @@ const calculateTotalCost = computed(() => {
 });
 
 
-const handleImageUpload = (event) => {
+const handleImageUpload = async (event) => {
   const file = event.target.files[0];
   if (file) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      uploadedImage.value = e.target.result; 
-      alert('Bild erfolgreich hochgeladen');
-    };
-    reader.readAsDataURL(file);
+    const uniqueFileName = `recipes/${Date.now()}-${file.name}`;
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from('image')
+      .upload(uniqueFileName, file);
+
+    if (uploadError) {
+      alert(`Error uploading image: ${uploadError.message}`);
+      console.error('Error uploading image:', uploadError);
+      return;
+    }
+    else {
+      const url = `https://${
+        import.meta.env.VITE_SUPABASE_BUCKET
+      }${uniqueFileName}`;
+      console.log('Image uploaded:', url);
+      uploadedImage.value = url;
+      recipe.value.image = uniqueFileName;
+    }
   }
 };
 
@@ -248,6 +260,7 @@ async function submitRecipeToSupabase(){
           allergies: selectedAllergies.value,
           categories: selectedCategories.value,
           typ: selectedTyp.value,
+          image_url: recipe.value.image,
           user_id: user.value.id
         }
       ]).select();
@@ -264,7 +277,6 @@ async function submitRecipeToSupabase(){
       
       console.log(ingredientsWithRecipeId);
 
-      // Bulk insert ingredients
       const { error: ingredientsError } = await supabase
         .from('ingredients')
         .insert (ingredientsWithRecipeId);
