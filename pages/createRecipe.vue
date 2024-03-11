@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-gray-100 p-4 md:p-10">
     <h1 class="text-3xl font-bold mb-6">Rezept erstellen</h1>
    
-    <form @submit.prevent="submitRecipe" class="bg-white shadow-md rounded px-4 md:px-8 pt-6 pb-8 mb-4">
+    <form @submit.prevent="submitRecipeToSupabase" class="bg-white shadow-md rounded px-4 md:px-8 pt-6 pb-8 mb-4">
       <div v-if="uploadedImage" class="mb-4 flex justify-center items-center">
         <img :src="uploadedImage" class="max-w-full h-auto max-h-60" alt="Hochgeladenes Bild" style="object-fit: contain;">
       </div>
@@ -160,12 +160,12 @@ const generateRecipe = async () => {
       const responseData = JSON.parse(response[0].message.content);
       generatedRecipe.value = responseData;
       
-      alert('Rezeptvorschlag wurde generiert.')
+      console.log('Rezeptvorschlag wurde generiert.')
     } catch (error) {
-      alert('Fehler beim Generieren des Rezeptvorschlags: ' + error.message)
+      console.log('Fehler beim Generieren des Rezeptvorschlags: ' + error.message)
     }
   } else {
-    alert('Bitte geben Sie zuerst einen Rezeptnamen ein.')
+    console.log('Bitte geben Sie zuerst einen Rezeptnamen ein.')
   }
 };
 
@@ -234,9 +234,51 @@ const handleNutritionTypeChange = (selectedType) => {
   }
 };
 
-const submitRecipe = () => {
-  alert('Rezept gespeichert (Dies ist nur ein Platzhalter)');
-};
+const supabase = useSupabaseClient()
+const user = useSupabaseUser()
+
+async function submitRecipeToSupabase(){
+  try {
+    const { data: recipeData, error: recipeError  } = await supabase
+      .from('recepies')
+      .insert([
+        {
+          name: recipeName.value,
+          description: recipe.value.description,
+          allergies: selectedAllergies.value,
+          categories: selectedCategories.value,
+          typ: selectedTyp.value,
+          user_id: user.value.id
+        }
+      ]).select();
+      
+      console.log(recipeData[0].id);
+
+      if (recipeError) throw recipeError;
+      const ingredientsWithRecipeId = recipe.value.ingredients.map(ingredient => ({
+        name: ingredient.name,
+        price: ingredient.price,
+        quantity: ingredient.quantity,
+        recepie_id: recipeData[0].id,
+        user_id: user.value.id
+      }));
+      
+      console.log(ingredientsWithRecipeId);
+
+      // Bulk insert ingredients
+      const { error: ingredientsError } = await supabase
+        .from('ingredients')
+        .insert (ingredientsWithRecipeId);
+
+      if (ingredientsError) throw ingredientsError;
+
+      alert('Rezept und Zutaten erfolgreich gespeichert!');
+      } catch (error) {
+      console.error('Fehler beim Speichern:', error);
+      alert('Fehler beim Speichern des Rezepts: ' + error.message);
+      }
+}
+
 </script>
 
 <style scoped>

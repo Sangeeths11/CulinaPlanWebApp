@@ -11,6 +11,8 @@
 </template>
 
 <script setup lang="ts">
+import { reactive, onMounted, nextTick } from 'vue';
+import ApexCharts from 'apexcharts';
 
 const charts = reactive([
   {
@@ -22,22 +24,16 @@ const charts = reactive([
       plotOptions: {
         bar: {
           borderRadius: 10,
-          borderRadiusApplication: 'around',
         },
       },
       xaxis: {
-        categories: Array.from(
-          { length: 10 },
-          (_, i) => new Date().getFullYear() - i
-        ),
+        categories: Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i),
       },
     },
-    series: [
-      {
-        name: 'Score',
-        data: Array.from({ length: 10 }, () => Math.floor(Math.random() * 100)),
-      },
-    ],
+    series: [{
+      name: 'Score',
+      data: Array.from({ length: 10 }, () => Math.floor(Math.random() * 100)),
+    }],
   },
   {
     title: 'Chart 2',
@@ -49,12 +45,10 @@ const charts = reactive([
         categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
       },
     },
-    series: [
-      {
-        name: 'Sales',
-        data: Array.from({ length: 10 }, () => Math.floor(Math.random() * 1000)),
-      },
-    ],
+    series: [{
+      name: 'Sales',
+      data: Array.from({ length: 10 }, () => Math.floor(Math.random() * 1000)),
+    }],
   },
   {
     title: 'Chart 3',
@@ -79,23 +73,17 @@ const charts = reactive([
 ]);
 
 const updateCharts = () => {
-  charts.forEach(chart => {
+  charts.forEach((chart, index) => {
     if (chart.options.chart.type === 'bar' || chart.options.chart.type === 'line') {
-      chart.series = [{
-        name: 'Score',
-        data: Array.from({ length: 10 }, () => Math.floor(Math.random() * 100)),
-      }];
+      chart.series[0].data = Array.from({ length: 10 }, () => Math.floor(Math.random() * 100));
     } else if (chart.options.chart.type === 'donut' || chart.options.chart.type === 'pie') {
-      chart.series = [30, 40, 30];
+      chart.series = Array.from({ length: 3 }, () => Math.floor(Math.random() * 100));
     }
   });
 };
 
-onMounted(() => {
+onMounted(async () => {
+  await nextTick();
   updateCharts();
 });
 </script>
-
-<style scoped>
-/* Add custom styling here */
-</style>
