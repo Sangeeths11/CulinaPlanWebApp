@@ -123,6 +123,7 @@
 const { chatCompletion } = useChatgpt()
 const recipeName = ref('');
 const generatedRecipe = ref('');
+const router = useRouter();
 
 
 const generateRecipe = async () => {
@@ -283,7 +284,7 @@ async function submitRecipeToSupabase(){
 
       if (ingredientsError) throw ingredientsError;
 
-      alert('Rezept und Zutaten erfolgreich gespeichert!');
+      router.push({ path: "/overview" })
       } catch (error) {
       console.error('Fehler beim Speichern:', error);
       alert('Fehler beim Speichern des Rezepts: ' + error.message);
