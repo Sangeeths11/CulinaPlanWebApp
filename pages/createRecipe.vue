@@ -1,12 +1,10 @@
 <template>
   <div class="min-h-screen bg-gray-100 p-4 md:p-10">
     <h1 class="text-3xl font-bold mb-6">Rezept erstellen</h1>
-   
     <form @submit.prevent="submitRecipeToSupabase" class="bg-white shadow-md rounded px-4 md:px-8 pt-6 pb-8 mb-4">
       <div v-if="uploadedImage" class="mb-4 flex justify-center items-center">
         <img :src="uploadedImage" class="max-w-full h-auto max-h-60" alt="Hochgeladenes Bild" style="object-fit: contain;">
       </div>
-
       <div class="mb-4">
         <div class="flex items-center justify-center w-full">
             <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800  hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
@@ -25,7 +23,6 @@
         <label for="recipeName" class="block text-gray-700 text-sm font-bold mb-2">Rezeptname</label>
         <input type="text" id="recipeName" v-model="recipeName" v-on:keyup.enter="generateRecipe" placeholder="Geben Sie einen Rezeptnamen ein und drücken Sie Enter" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
       </div>
-
       <div class="mb-4">
         <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
           Beschreibung
@@ -67,7 +64,6 @@
                   <label :for="'typ-' + index" class="text-gray-700 ml-2">{{ typ }}</label>
                 </div>
               </div>
-              <!-- Datum auswählen -->
             </div>
           </div>
         </div>
@@ -92,7 +88,6 @@
             <p class="text-gray-700 text-sm font-bold">Gesamtkosten: {{ calculateTotalCost.toFixed(2) }} CHF</p>
           </div>
         </div>
-
       </div>
       <div class="flex items-center justify-between mt-6">
         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
@@ -189,7 +184,6 @@ const recipe = ref({
 });
 
 const uploadedImage = ref(null);
-
 
 
 const allergies = ['Gluten', 'Nüsse', 'Laktose', 'Soja'];

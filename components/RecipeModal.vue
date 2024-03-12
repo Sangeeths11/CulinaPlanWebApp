@@ -45,7 +45,7 @@
             class="px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             @click="assignRecipe"
           >
-            Zuweisen
+          Zuweisen
           </button>
         </div>
       </div>
@@ -68,7 +68,16 @@ const closeModal  = () => {
 
 const assignRecipe = () => {
   if (selectedDate.value && morgenRecipe.value && lunchRecipe.value && eveningRecipe.value && snackRecipe.value) {
-    emits('assign', selectedDate.value, morgenRecipe.value, lunchRecipe.value, eveningRecipe.value, snackRecipe.value);
+
+    const assignvalues = [];
+    assignvalues.push(selectedDate.value);
+    assignvalues.push(morgenRecipe.value);
+    assignvalues.push(lunchRecipe.value);
+    assignvalues.push(eveningRecipe.value);
+    assignvalues.push(snackRecipe.value);
+    // console.log(assignvalues);
+    
+    emits('assign', assignvalues);
     selectedDate.value = '';
     morgenRecipe.value = '';
     lunchRecipe.value = '';

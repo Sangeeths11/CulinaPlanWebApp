@@ -1,19 +1,18 @@
 <template>
-  <div class="min-h-screen bg-gray-100 p-4 md:p-10">
-    <h1 class="text-3xl font-bold mb-6">Dashboard</h1>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-      <div v-for="(chart, index) in charts" :key="index" class="rounded-lg overflow-hidden border border-gray-200">
-        <h2 class="bg-blue-500 text-white text-lg font-bold p-4">{{ chart.title }}</h2>
-        <apexchart :key="'chart-' + index" height="300" :options="chart.options" :series="chart.series"></apexchart>
+  <ClientOnly>
+    <div class="min-h-screen bg-gray-100 p-4 md:p-10">
+      <h1 class="text-3xl font-bold mb-6">Dashboard</h1>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+        <div v-for="(chart, index) in charts" :key="index" class="rounded-lg overflow-hidden border border-gray-200">
+          <h2 class="bg-blue-500 text-white text-lg font-bold p-4">{{ chart.title }}</h2>
+          <apexchart :key="'chart-' + index" height="300" :options="chart.options" :series="chart.series"></apexchart>
+        </div>
       </div>
     </div>
-  </div>
+  </ClientOnly>
 </template>
 
 <script setup lang="ts">
-import { reactive, onMounted, nextTick } from 'vue';
-import ApexCharts from 'apexcharts';
-
 const charts = reactive([
   {
     title: 'Chart 1',

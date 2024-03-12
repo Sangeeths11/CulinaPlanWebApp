@@ -34,29 +34,24 @@ const assignedRecipes = ref({});
 const calendarAttributes = ref([]);
 
 const assignRecipe = (date, recipe) => {
-  const formattedDate = new Date(date).toISOString().split('T')[0];
-  if (!assignedRecipes.value[formattedDate]) {
-    assignedRecipes.value[formattedDate] = [];
-  }
-  assignedRecipes.value[formattedDate].push(recipe);
-  calenderUpdate();
+  const formattedDate = new Date(date[0]).toISOString().split('T')[0];
+  const supabase = useSupabaseClient()
+  const router = useRouter()
+
+  
 };
 
 const calenderUpdate = () => {
   const attributes = [];
-  
   for (const date in assignedRecipes.value) {
-    let labelname = 'Rezepte: '; // Initialisiert labelname für jedes Datum neu
+    let labelname = 'Rezepte: ';
     const recipes = assignedRecipes.value[date];
-
-    // Überprüft, ob mehr als ein Rezept für das Datum vorhanden ist
+    
     if (recipes.length > 1) {
       recipes.forEach((recipe, index) => {
-        // Fügt jedes Rezept zum labelname hinzu, trennt mit Komma, außer beim letzten Element
         labelname += `${recipe}${index < recipes.length - 1 ? ', ' : ''}`;
       });
     } else {
-      // Wenn nur ein Rezept vorhanden ist, fügt dieses direkt hinzu
       labelname += recipes[0];
     }
 
@@ -71,10 +66,13 @@ const calenderUpdate = () => {
       },
     });
   }
+  console.log(attributes);
 
   calendarAttributes.value = attributes;
+  calendarAttributes.value = attributes;
+  nextTick(() => {
+    console.log("Kalender-Attribute wurden aktualisiert.");
+  });
+  console.log(calendarAttributes.value);
 };
-
-
-
 </script>
