@@ -260,8 +260,8 @@ async function submitRecipeToSupabase(){
           description: recipe.value.description,
           allergies: selectedAllergies.value,
           categories: selectedCategories.value,
-          typ: selectedTyp.value,
-          image_url: recipe.value.image,
+          typ: selectedTyp.value[0],
+          image_url: uploadedImage.value,
           user_id: user.value.id
         }
       ]).select();
