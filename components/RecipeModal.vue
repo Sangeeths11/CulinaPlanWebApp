@@ -84,7 +84,7 @@ const assignRecipe = () => {
       evening: eveningRecipe.value,
       snack: snackRecipe.value,
     };
-    
+    console.log(assignValues);
     emits('assign', assignValues);
 
     // Resetting the form fields

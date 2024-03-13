@@ -32,11 +32,36 @@ const today = new Date();
 const showRecipeModal = ref(false);
 const assignedRecipes = ref({});
 const calendarAttributes = ref([]);
+const supabase = useSupabaseClient()
 
 const assignRecipe = (date, recipe) => {
-  const formattedDate = new Date(date[0]).toISOString().split('T')[0];
+  console.log(date, recipe);
+  const formattedDate = new Date(date['date']).toISOString().split('T')[0];
   const supabase = useSupabaseClient()
   const router = useRouter()
+  console.log(date);
+  saveRecipeAssignment(formattedDate, date);
+};
+
+const saveRecipeAssignment = async (date, recipe) => {
+  const { data, error } = await supabase
+    .from('calender')
+    .insert(
+      {
+        'date': date,
+        'morning_id': recipe['morgen']['id'],
+        'lunch_id': recipe['lunch']['id'],
+        'evening_id': recipe['evening']['id'],
+        'snack_id': recipe['snack']['id'],
+      },
+    );
+  if (error) {
+    console.error('Error saving recipe assignment:', error);
+  } else {
+    console.log('Recipe assignment saved:', data);
+    assignedRecipes.value[date] = recipe;
+    calenderUpdate();
+  }
 };
 
 const calenderUpdate = () => {
