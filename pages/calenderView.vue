@@ -59,25 +59,47 @@ const saveRecipeAssignment = async (date, recipe) => {
     console.error('Error saving recipe assignment:', error);
   } else {
     console.log('Recipe assignment saved:', data);
-    assignedRecipes.value[date] = recipe;
-    calenderUpdate();
+    fetchRecipeAssignments();
   }
 };
+
+const fetchRecipeAssignments = async () => {
+  // Verwenden Sie eine JOIN-Operation, um alle zugehörigen Rezeptnamen in einer Abfrage zu erhalten
+  const { data, error } = await supabase
+    .from('calender')
+    .select(`
+      date,
+      morning:morning_id (name),
+      lunch:lunch_id (name),
+      evening:evening_id (name),
+      snack:snack_id (name)
+    `);
+
+  if (error) {
+    console.error('Error fetching recipe assignments with joins:', error);
+    return;
+  }
+
+  // Transformieren der Daten für die Verwendung in der Anwendung
+  const assignments = {};
+  for (const item of data) {
+    const { date, morning, lunch, evening, snack } = item;
+    assignments[date] = {
+      morning: morning ? { id: morning.id, name: morning.name } : undefined,
+      lunch: lunch ? { id: lunch.id, name: lunch.name } : undefined,
+      evening: evening ? { id: evening.id, name: evening.name } : undefined,
+      snack: snack ? { id: snack.id, name: snack.name } : undefined,
+    };
+  }
+  assignedRecipes.value = assignments;
+  calenderUpdate();
+};
+
 
 const calenderUpdate = () => {
   const attributes = [];
   for (const date in assignedRecipes.value) {
-    let labelname = 'Rezepte: ';
-    const recipes = assignedRecipes.value[date];
-    
-    if (recipes.length > 1) {
-      recipes.forEach((recipe, index) => {
-        labelname += `${recipe}${index < recipes.length - 1 ? ', ' : ''}`;
-      });
-    } else {
-      labelname += recipes[0];
-    }
-
+    const labelname = assignedRecipes.value[date]['morning']['name'] + ', ' + assignedRecipes.value[date]['lunch']['name'] + ', ' + assignedRecipes.value[date]['evening']['name'] + ', ' + assignedRecipes.value[date]['snack']['name'];
     attributes.push({
       key: date,
       dates: [date],
@@ -89,13 +111,14 @@ const calenderUpdate = () => {
       },
     });
   }
-  console.log(attributes);
-
-  calendarAttributes.value = attributes;
   calendarAttributes.value = attributes;
   nextTick(() => {
     console.log("Kalender-Attribute wurden aktualisiert.");
   });
   console.log(calendarAttributes.value);
 };
+
+onMounted(async () => {
+  await fetchRecipeAssignments();
+});
 </script>
