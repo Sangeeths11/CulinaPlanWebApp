@@ -92,6 +92,25 @@ const assignRecipe = () => {
     snackRecipe.value = '';
   }
 };
+
+const fetchRecipesForMeal = async (meal: string) => {
+  const { data, error } = await supabase
+    .from('recepies')
+    .select('id, name')
+    .contains('categories', [meal]);
+  if (error) {
+    console.error('Error fetching recipes:', error);
+    return [];
+  }
+  return data;
+};
+
+onMounted(async () => {
+  breakfastRecipes.value = await fetchRecipesForMeal('Frühstück');
+  lunchRecipes.value = await fetchRecipesForMeal('Mittagessen');
+  dinnerRecipes.value = await fetchRecipesForMeal('Abendessen');
+  snackRecipes.value = await fetchRecipesForMeal('Snack');
+});
 </script>
 
 <style scoped>

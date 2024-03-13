@@ -37,27 +37,6 @@ const assignRecipe = (date, recipe) => {
   const formattedDate = new Date(date[0]).toISOString().split('T')[0];
   const supabase = useSupabaseClient()
   const router = useRouter()
-
-  try {
-    const { data: recipeData, error: recipeError  } = await supabase
-      .from('calender')
-      .insert([
-        {
-          date: formattedDate,
-          morning_id: recipe,
-          lunch_id: recipe,
-          dinner_id: recipe,
-          snack_id: recipe,
-        }
-      ]).select();
-    if (recipeError) {
-      throw recipeError;
-    }
-    console.log(recipeData);
-    router.push('/rezepte')
-  } catch (error) {
-    console.error('Error inserting new recipe:', error);
-  }
 };
 
 const calenderUpdate = () => {
