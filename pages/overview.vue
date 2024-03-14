@@ -3,6 +3,8 @@ const showSideNav = ref(false);
 const supabase = useSupabaseClient()
 const recipeStore = useRecipeStore();
 const showDeleteButton = ref(false);
+const showEditButton = ref(false);
+
 
 
 const toggleSideNav = () => {
@@ -39,6 +41,24 @@ const activateDeleteFunction = () => {
   else {
     showDeleteButton.value = true;
   }
+};
+
+const activateEditFunction = () => {
+  if (showEditButton.value) {
+    showEditButton.value = false;
+    return;
+  }
+  else {
+    showEditButton.value = true;
+  }
+};
+
+const editRecipe = async (recipe) => {
+  // Logik zum Bearbeiten eines Rezepts
+  // Das könnte das Öffnen eines Modal-Dialogs mit einem Formular zur Bearbeitung der Rezeptdetails sein
+  console.log('Bearbeitungsfunktion für Rezept ID:', recipe.id);
+  // Hier würden Sie normalerweise eine Zustandsaktualisierung oder Navigation durchführen,
+  // z.B. router.push(`/editRecipe/${recipe.id}`);
 };
 
 </script>
@@ -86,6 +106,11 @@ const activateDeleteFunction = () => {
             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
+        <button v-if="showEditButton" @click="editRecipe(recipe)" class="absolute top-2 left-2 bg-yellow-500 hover:bg-yellow-600 text-white p-1 rounded-full focus:outline-none">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L12 21H3v-9l10.768-10.768z" />
+          </svg>
+        </button>
         <img :src="recipe.image_url" alt="Gerichtsbild" class="w-full h-32 object-cover">
         <div class="p-4">
           <h2 class="text-xl font-bold mb-2">{{ recipe.name }}</h2>
@@ -108,6 +133,12 @@ const activateDeleteFunction = () => {
       <button @click="openCreateRecipeModal" class="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-full shadow-lg transition duration-300 flex items-center justify-center group">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
+        </svg>
+      </button>
+
+      <button @click="activateEditFunction" class="bg-yellow-500 hover:bg-yellow-600 text-white p-4 rounded-full shadow-lg transition duration-300 flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L12 21H3v-9l10.768-10.768z" />
         </svg>
       </button>
 
