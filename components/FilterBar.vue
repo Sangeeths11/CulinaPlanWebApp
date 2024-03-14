@@ -5,7 +5,11 @@
       <button @click="toggleAdvancedSearch" class="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded transition duration-300">
         <Icon name="mdi:filter" class="w-6 h-6" />
       </button>
+      <button @click="apply" class="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded transition duration-300">
+        <Icon name="mdi:filter-variant" class="w-6 h-6" />
+      </button>
     </div>
+    
 
     <transition name="fade">
       <div v-if="showAdvancedSearch" class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -30,6 +34,7 @@
       </div>
     </transition>
   </div>
+
 </template>
 
 <script setup lang="ts">
@@ -40,10 +45,28 @@ const categories = ['Alle', 'Frühstück', 'Mittagessen', 'Abendessen', 'Snacks'
 const selectedAllergy = ref('');
 const allergies = ['Keine', 'Nüsse', 'Gluten', 'Laktose'];
 const selectedTyp = ref('');
-const types = ['Fleischhaltig','Vegetarisch'];
+const types = ['Beide','Fleischhaltig','Vegetarisch'];
+
+
+
+
+selectedCategory.value = categories[0];
+selectedAllergy.value = allergies[0];
+
+const emit = defineEmits(['applyFilter']);
 
 const toggleAdvancedSearch = () => {
   showAdvancedSearch.value = !showAdvancedSearch.value;
+};
+
+const apply = () => {
+  const filterData = { 
+    searchQuery: searchQuery.value,
+    category: selectedCategory.value,
+    allergy: selectedAllergy.value,
+    typ: selectedTyp.value
+  };
+  emit('applyFilter', filterData);
 };
 </script>
 

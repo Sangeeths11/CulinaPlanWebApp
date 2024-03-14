@@ -3,6 +3,7 @@ export const useRecipeStore = defineStore('recipeStore', () => {
   const user = useSupabaseUser();
   const currentRecipe = ref(null);
   const recipes = ref([]);
+  const filteredRecipes = ref([]);
 
   const setCurrentRecipe = async (recipe) => {
       const { data, error } = await client
@@ -17,20 +18,36 @@ export const useRecipeStore = defineStore('recipeStore', () => {
       }
   };
 
-  const fetchRecipes = async () => {
-      const { data, error } = await client
-          .from('recepies')
-          .select('*')
-          .eq('user_id', user.value.id)
-          .order('id', { ascending: true });
-      if (error) {
-          console.error('Error loading recipes', error);
-      } else {
-          recipes.value = data;
-          if (recipes.value.length > 0 && currentRecipe.value === null) {
-              setCurrentRecipe(recipes.value[recipes.value.length - 1]);
-          }
+  const fetchRecipes = async (filterData = null) => {
+    let query = client
+      .from('recepies')
+      .select('*')
+      .eq('user_id', user.value.id);
+
+    if (filterData) {
+      if (filterData.searchQuery) {
+        query = query.ilike('name', `%${filterData.searchQuery}%`);
       }
+      if (filterData.category && filterData.category !== 'Alle') {
+        console.log('filterData.category', filterData.category);
+        query = query.contains('categories', [filterData.category]);
+      }
+      if (filterData.allergy && filterData.allergy !== 'Keine') {
+        console.log('filterData.allergy', filterData.allergy);
+        query = query.contains('allergies', [filterData.allergy]);
+      }
+      if (filterData.typ && filterData.typ !== 'Beide') {
+        query = query.contains('typ', filterData.typ);
+      }
+    }
+
+    const { data, error } = await query.order('id', { ascending: true });
+
+    if (error) {
+      console.error('Error loading recipes', error);
+    } else {
+      recipes.value = data;
+    }
   };
 
   const updateRecipe = async () => {

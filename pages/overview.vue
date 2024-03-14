@@ -54,11 +54,12 @@ const activateEditFunction = () => {
 };
 
 const editRecipe = async (recipe) => {
-  // Logik zum Bearbeiten eines Rezepts
-  // Das könnte das Öffnen eines Modal-Dialogs mit einem Formular zur Bearbeitung der Rezeptdetails sein
   console.log('Bearbeitungsfunktion für Rezept ID:', recipe.id);
-  // Hier würden Sie normalerweise eine Zustandsaktualisierung oder Navigation durchführen,
-  // z.B. router.push(`/editRecipe/${recipe.id}`);
+};
+
+const applyFilter = (filterData) => {
+  console.log('Filter angewendet:', filterData);
+  recipeStore.fetchRecipes(filterData);
 };
 
 </script>
@@ -97,7 +98,7 @@ const editRecipe = async (recipe) => {
     </div>
 
     <div class="p-5">
-      <FilterBar/>
+      <FilterBar @applyFilter="applyFilter" />
     </div>
     <div class="p-5 grid grid-cols-1 md:grid-cols-3 gap-4">
       <div v-for="recipe in recipeStore.recipes" :key="recipe.id" class="relative bg-white rounded-lg shadow-md overflow-hidden">
