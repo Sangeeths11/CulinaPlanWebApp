@@ -62,7 +62,9 @@ const applyFilter = (filterData) => {
   console.log('Filter angewendet:', filterData);
   recipeStore.fetchRecipes(filterData);
 };
-
+definePageMeta({
+  layout: 'non',
+})
 </script>
 
 <template>

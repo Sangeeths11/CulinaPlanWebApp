@@ -1,6 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
-  middleware: ['auth-index']
+  middleware: ['auth-index'],
+  layout: 'non',
 })
 </script>
 

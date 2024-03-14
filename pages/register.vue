@@ -24,6 +24,9 @@ const register = async () => {
     router.push('/login');
   }
 };
+definePageMeta({
+  layout: 'non',
+})
 </script>
 <template>
   <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">

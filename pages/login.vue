@@ -17,6 +17,9 @@ const login = async () => {
       router.push('/');
     }
 }
+definePageMeta({
+  layout: 'non',
+})
 </script>
 
 <template>

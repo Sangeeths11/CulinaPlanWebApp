@@ -13,6 +13,10 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  title: 'Dashboard',
+  layout: 'default'
+});
 const charts = reactive([
   {
     title: 'Chart 1',
