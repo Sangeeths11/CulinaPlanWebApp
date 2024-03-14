@@ -5,8 +5,11 @@
       <button @click="toggleAdvancedSearch" class="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded transition duration-300">
         <Icon name="mdi:filter" class="w-6 h-6" />
       </button>
-      <button @click="apply" class="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded transition duration-300">
-        <Icon name="mdi:filter-variant" class="w-6 h-6" />
+      <button @click="apply" class="bg-green-500 hover:bg-green-600 text-white p-2 rounded transition duration-300">
+        <Icon name="ph:magnifying-glass" class="w-6 h-6" />
+      </button>
+      <button @click="activateReset" class="bg-red-500 hover:bg-red-600 text-white p-2 rounded transition duration-300">
+        <Icon name="carbon:reset" class="w-6 h-6" />
       </button>
     </div>
     
@@ -57,6 +60,14 @@ const emit = defineEmits(['applyFilter']);
 
 const toggleAdvancedSearch = () => {
   showAdvancedSearch.value = !showAdvancedSearch.value;
+};
+
+const activateReset = () => {
+  searchQuery.value = '';
+  selectedCategory.value = categories[0];
+  selectedAllergy.value = allergies[0];
+  selectedTyp.value = types[0];
+  apply();
 };
 
 const apply = () => {
