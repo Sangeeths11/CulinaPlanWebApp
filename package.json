@@ -10,8 +10,10 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@pinia/nuxt": "^0.5.1",
     "apexcharts": "^3.47.0",
     "nuxt": "3.10.3",
+    "pinia": "^2.1.7",
     "vue": "^3.4.21",
     "vue-router": "4.3.0",
     "vue3-apexcharts": "^1.5.2"
@@ -23,7 +25,7 @@
     "nuxt-chatgpt": "^0.2.3",
     "nuxt-icon": "^0.6.9",
     "postcss": "^8.4.35",
-    "sass": "^1.71.1",
+    "sass": "^1.72.0",
     "tailwindcss": "^3.4.1"
   }
 }

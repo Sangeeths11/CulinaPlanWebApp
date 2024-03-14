@@ -18,5 +18,5 @@ export default defineNuxtConfig({
   supabase: {
     redirect: false
   },
-  modules: ['nuxt-icon','@nuxtjs/supabase','@samk-dev/nuxt-vcalendar',"nuxt-chatgpt"],
+  modules: ['nuxt-icon','@nuxtjs/supabase','@samk-dev/nuxt-vcalendar',"nuxt-chatgpt","@pinia/nuxt"],
 })
