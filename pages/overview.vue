@@ -55,6 +55,7 @@ const activateEditFunction = () => {
 
 const editRecipe = async (recipe) => {
   console.log('Bearbeitungsfunktion für Rezept ID:', recipe.id);
+  router.push(`/editRecipe/${recipe.id}`);
 };
 
 const applyFilter = (filterData) => {
