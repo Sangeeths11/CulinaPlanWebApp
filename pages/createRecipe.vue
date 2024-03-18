@@ -1,6 +1,10 @@
 <template>
   <div class="min-h-screen bg-gray-100 p-4 md:p-10">
-
+    <div v-if="isLoading" class="fixed inset-0 bg-gray-600 bg-opacity-75 flex justify-center items-center z-50">
+      <div class="spinner-border animate-spin inline-block w-16 h-16 border-4 border-t-4 border-gray-200 rounded-full" role="status">
+        <span class="visually-hidden"></span>
+      </div>
+    </div>
     <h1 class="text-3xl font-bold mb-6">Rezept erstellen</h1>
     <form @submit.prevent="submitRecipeToSupabase" class="bg-white shadow-md rounded px-4 md:px-8 pt-6 pb-8 mb-4">
       <div v-if="errorMessage" class="mb-4 w-full">
@@ -30,7 +34,7 @@
       </div>
       <div class="mb-4">
         <label for="recipeName" class="block text-gray-700 text-sm font-bold mb-2">Rezeptname</label>
-        <input type="text" id="recipeName" v-model="recipeName" v-on:keyup.enter="generateRecipe" placeholder="Geben Sie einen Rezeptnamen ein und wählen Sie die AI um ihnen den Rezept vorschlag zu machen" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        <input type="text" id="recipeName" v-model="recipeName" @blur="generateRecipe" placeholder="Geben Sie einen Rezeptnamen ein und verlassen sie dieses Feld damit die AI ihnen die Zutaten vorschlagen kann" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
       </div>
       <div class="mb-4">
         <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
@@ -129,11 +133,14 @@ const recipeName = ref('');
 const generatedRecipe = ref('');
 const router = useRouter();
 const errorMessage = ref('');
+const isLoading = ref(false);
+
 
 
 const generateRecipe = async () => {
   
   if (recipeName.value.trim() !== '') {
+    isLoading.value = true;
     try {
       const prompt = `
         Give me the recipe for ${recipeName.value}. Please make sure that you indicate the cost and quantity of each product. It is important that you give me this information in a nicely structured way.
@@ -169,6 +176,8 @@ const generateRecipe = async () => {
       console.log('Rezeptvorschlag wurde generiert.')
     } catch (error) {
       console.log('Fehler beim Generieren des Rezeptvorschlags: ' + error.message)
+    }finally {
+      isLoading.value = false;
     }
   } else {
     console.log('Bitte geben Sie zuerst einen Rezeptnamen ein.')
@@ -300,4 +309,20 @@ definePageMeta({
 </script>
 
 <style scoped>
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.spinner-border {
+  display: inline-block;
+  width: 4rem; /* Größe des Ladeindikators anpassen */
+  height: 4rem; /* Größe des Ladeindikators anpassen */
+  border-width: 0.5rem; /* Dicke der Ladeindikator-Border anpassen */
+  border-color: rgba(255, 255, 255, 0.5); /* Farbe des Ladeindikators anpassen */
+  border-top-color: #3498db; /* Farbe des aktiven Teils des Ladeindikators */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
 </style>
+
