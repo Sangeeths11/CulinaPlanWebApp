@@ -247,7 +247,6 @@ const user = useSupabaseUser()
 const recipeId = ref(route.params.id);
 async function submitRecipeToSupabase() {
     try {
-        // Aktualisieren des Hauptrezepts
         const { error: recipeError } = await supabase
             .from('recepies')
             .update({
@@ -256,21 +255,18 @@ async function submitRecipeToSupabase() {
                 allergies: selectedAllergies.value,
                 categories: selectedCategories.value,
                 typ: selectedTyp.value[0],
-                image_url: uploadedImage.value // Annahme, dass dies das Feld für den Bildpfad ist
+                image_url: uploadedImage.value
             })
             .match({ id: recipeId.value });
 
         if (recipeError) throw recipeError;
 
-        // Löschen der alten Zutaten
         const { error: deleteIngredientsError } = await supabase
             .from('ingredients')
             .delete()
             .match({ recepie_id: recipeId.value });
 
         if (deleteIngredientsError) throw deleteIngredientsError;
-
-        // Hinzufügen der aktualisierten/ neuen Zutaten
         const ingredientsWithRecipeId = recipe.value.ingredients.map(ingredient => ({
             ...ingredient,
             recepie_id: recipeId.value

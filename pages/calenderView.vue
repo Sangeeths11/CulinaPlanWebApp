@@ -64,7 +64,6 @@ const saveRecipeAssignment = async (date, recipe) => {
 };
 
 const fetchRecipeAssignments = async () => {
-  // Verwenden Sie eine JOIN-Operation, um alle zugehörigen Rezeptnamen in einer Abfrage zu erhalten
   const { data, error } = await supabase
     .from('calender')
     .select(`
@@ -80,7 +79,6 @@ const fetchRecipeAssignments = async () => {
     return;
   }
 
-  // Transformieren der Daten für die Verwendung in der Anwendung
   const assignments = {};
   for (const item of data) {
     const { date, morning, lunch, evening, snack } = item;

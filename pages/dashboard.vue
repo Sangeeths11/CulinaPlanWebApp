@@ -42,40 +42,79 @@ const charts = reactive([
     },
     series: [],
   },
-  // Fügen Sie hier weitere Charts hinzu, falls gewünscht
+
 ]);
 
 const recipeStore = useRecipeStore();
 
 const updateChartsWithRecipeData = () => {
   const categoryCounts = {};
+  const typeCounts = {};
 
   recipeStore.recipes.forEach(recipe => {
     recipe.categories.forEach(category => {
       categoryCounts[category] = (categoryCounts[category] || 0) + 1;
     });
+
+
+    const type = recipe.typ;
+    typeCounts[type] = (typeCounts[type] || 0) + 1;
   });
 
   const categories = Object.keys(categoryCounts);
-  const counts = Object.values(categoryCounts);
+  const categoryCountsValues = Object.values(categoryCounts);
+
+  const types = Object.keys(typeCounts);
+  const typeCountsValues = Object.values(typeCounts);
 
   const categoryChartIndex = charts.findIndex(chart => chart.title === 'Rezepte pro Kategorie');
   if (categoryChartIndex !== -1) {
-    const updatedChart = { ...charts[categoryChartIndex] };
-    updatedChart.options = { ...updatedChart.options, labels: categories };
-    updatedChart.series = counts;
-    charts[categoryChartIndex] = updatedChart;
+    const updatedCategoryChart = { ...charts[categoryChartIndex] };
+    updatedCategoryChart.options = { ...updatedCategoryChart.options, labels: categories };
+    updatedCategoryChart.series = categoryCountsValues;
+    charts[categoryChartIndex] = updatedCategoryChart;
+  }
+
+
+  const typeChartIndex = charts.findIndex(chart => chart.title === 'Rezepte nach Typ');
+  if (typeChartIndex !== -1) {
+    const updatedTypeChart = { ...charts[typeChartIndex] };
+    updatedTypeChart.options = { ...updatedTypeChart.options, labels: types };
+    updatedTypeChart.series = typeCountsValues;
+    charts[typeChartIndex] = updatedTypeChart;
+  } else {
+    charts.push({
+      title: 'Rezepte nach Typ',
+      options: {
+        chart: {
+          type: 'donut',
+        },
+        labels: types,
+        responsive: [{
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 200,
+            },
+            legend: {
+              position: 'bottom',
+            },
+          },
+        }],
+      },
+      series: typeCountsValues,
+    });
   }
 };
 
 onMounted(async () => {
   await nextTick();
   recipeStore.fetchRecipes().then(() => {
-    updateChartsWithRecipeData(); // Aktualisieren Sie die Charts, nachdem die Rezepte abgerufen wurden
+    updateChartsWithRecipeData();
   });
 });
 </script>
 
 <style scoped>
-/* Stildefinitionen nach Bedarf */
+
 </style>

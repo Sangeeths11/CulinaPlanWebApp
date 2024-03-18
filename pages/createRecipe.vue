@@ -328,11 +328,11 @@ definePageMeta({
 
 .spinner-border {
   display: inline-block;
-  width: 4rem; /* Größe des Ladeindikators anpassen */
-  height: 4rem; /* Größe des Ladeindikators anpassen */
-  border-width: 0.5rem; /* Dicke der Ladeindikator-Border anpassen */
-  border-color: rgba(255, 255, 255, 0.5); /* Farbe des Ladeindikators anpassen */
-  border-top-color: #3498db; /* Farbe des aktiven Teils des Ladeindikators */
+  width: 4rem; 
+  height: 4rem; 
+  border-width: 0.5rem;
+  border-color: rgba(255, 255, 255, 0.5);
+  border-top-color: #3498db;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
