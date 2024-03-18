@@ -43,8 +43,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Hauptbereich für Seiteninhalt -->
     <NuxtPage />
   </div>
 </template>

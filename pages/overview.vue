@@ -5,6 +5,8 @@ const showDeleteButton = ref(false);
 const showEditButton = ref(false);
 
 const router = useRouter();
+const deleteConfirmationModal = ref(null);
+const recipeToDelete = ref(null);
 
 definePageMeta({
   title: 'Rezepte Übersicht',
@@ -20,11 +22,18 @@ const openCreateRecipeModal = () => {
   router.push('/createRecipe');
 };
 
-const confirmDeletion = async (recipe) => {
-  if (window.confirm('Möchten Sie dieses Rezept wirklich löschen?')) {
-    await recipeStore.deleteRecipe(recipe);
+function openDeleteConfirmation(recipe) {
+  recipeToDelete.value = recipe;
+  deleteConfirmationModal.value.show();
+}
+
+const confirmDeletion = async () => {
+  if (recipeToDelete.value) {
+    console.log('Lösche Rezept ID:', recipeToDelete.value);
+    await recipeStore.deleteRecipe(recipeToDelete.value);
+    recipeToDelete.value = null;
+    await recipeStore.fetchRecipes();
   }
-  showDeleteButton.value = false;
 };
 
 const activateDeleteFunction = () => {
@@ -60,7 +69,7 @@ const applyFilter = (filterData) => {
 
 <template>
   <div class="min-h-screen bg-gray-100">
-
+    <DeleteConfirmationModal ref="deleteConfirmationModal" @confirm="confirmDeletion"/>
     <div class="p-5">
       <h1 class="text-3xl font-bold mb-2">Rezepte Übersicht</h1>
     </div>
@@ -70,7 +79,7 @@ const applyFilter = (filterData) => {
     </div>
     <div class="p-5 grid grid-cols-1 md:grid-cols-3 gap-4">
       <div v-for="recipe in recipeStore.recipes" :key="recipe.id" class="relative bg-white rounded-lg shadow-md overflow-hidden">
-        <button v-if="showDeleteButton" @click="confirmDeletion(recipe)" class="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full focus:outline-none">
+        <button v-if="showDeleteButton" @click="openDeleteConfirmation(recipe)" class="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full focus:outline-none">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
