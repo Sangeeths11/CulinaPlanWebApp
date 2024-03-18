@@ -2920,10 +2920,10 @@ h3@*, h3@^1.10.2, h3@^1.11.1:
     uncrypto "^0.1.3"
     unenv "^1.9.0"
 
-happy-dom@*, happy-dom@^13.9.0, "happy-dom@^9.10.9 || ^10.0.0 || ^11.0.0 || ^12.0.0 || ^13.0.0":
-  version "13.9.0"
-  resolved "https://registry.npmjs.org/happy-dom/-/happy-dom-13.9.0.tgz"
-  integrity sha512-hMzsFn2x+B61TF7wsJ3La/exaxW9AWZePlNGzAkMvoVYXI3pMqPSGTT1qXTwcsVLB+44TM8KjHuoQLLx4EX9Vg==
+happy-dom@*, happy-dom@^13.10.0, "happy-dom@^9.10.9 || ^10.0.0 || ^11.0.0 || ^12.0.0 || ^13.0.0":
+  version "13.10.0"
+  resolved "https://registry.npmjs.org/happy-dom/-/happy-dom-13.10.0.tgz"
+  integrity sha512-e5PUMmcJjwuIBTChTGa1cgzKJnPPaMLFXFRYDnFv1j5hdbZ25F5lj+nYOVB4Nx7RaHLkTvn6Il6cFyPAff1L2w==
   dependencies:
     entities "^4.5.0"
     webidl-conversions "^7.0.0"
