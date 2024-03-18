@@ -18,10 +18,6 @@
         <Icon name="uil:calender" class="h-6 w-6 text-blue-500" />
         <p>Kalender</p>
       </router-link>
-      <router-link to="/profile" class="px-6 py-3 text-lg font-semibold flex items-center space-x-4 hover:bg-gray-100">
-        <Icon name="iconamoon:profile" class="h-6 w-6 text-blue-500" />
-        <p>Profil</p>
-      </router-link>
     </div>
 
     <div class="flex justify-between items-center p-5">
@@ -30,7 +26,7 @@
       </button>
       
       <div class="flex items-center space-x-2">
-        <span class="text-gray-600">Benutzername</span>
+        <span class="text-gray-600">{{ user.email }}</span>
         <img src="assets/spoon.png" alt="Profil" class="h-10 w-10 rounded-full" @click="toggleLogoutPopup">
       </div>
     </div>
@@ -51,6 +47,7 @@
 const showSideNav = ref(false)
 const showLogoutPopup = ref(false)
 const router = useRouter()
+const user = useSupabaseUser()
 const supabase = useSupabaseClient()
 
 function toggleSideNav() {

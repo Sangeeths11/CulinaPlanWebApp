@@ -5,7 +5,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
         <div v-for="(chart, index) in charts" :key="index" class="rounded-lg overflow-hidden border border-gray-200">
           <h2 class="bg-blue-500 text-white text-lg font-bold p-4">{{ chart.title }}</h2>
-          <apexchart :key="'chart-' + index" height="300" :options="chart.options" :series="chart.series"></apexchart>
+          <apexchart :key="'chart-' + index" type="donut" height="350" :options="chart.options" :series="chart.series"></apexchart>
         </div>
       </div>
     </div>
@@ -13,81 +13,69 @@
 </template>
 
 <script setup lang="ts">
+const categoryCounts = {};
 definePageMeta({
   title: 'Dashboard',
   layout: 'default',
   middleware: ['auth-index'],
 });
+
 const charts = reactive([
   {
-    title: 'Chart 1',
-    options: {
-      chart: {
-        type: 'bar',
-      },
-      plotOptions: {
-        bar: {
-          borderRadius: 10,
-        },
-      },
-      xaxis: {
-        categories: Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i),
-      },
-    },
-    series: [{
-      name: 'Score',
-      data: Array.from({ length: 10 }, () => Math.floor(Math.random() * 100)),
-    }],
-  },
-  {
-    title: 'Chart 2',
-    options: {
-      chart: {
-        type: 'line',
-      },
-      xaxis: {
-        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
-      },
-    },
-    series: [{
-      name: 'Sales',
-      data: Array.from({ length: 10 }, () => Math.floor(Math.random() * 1000)),
-    }],
-  },
-  {
-    title: 'Chart 3',
+    title: 'Rezepte pro Kategorie',
     options: {
       chart: {
         type: 'donut',
       },
-      labels: ['Team A', 'Team B', 'Team C'],
+      labels: [],
+      responsive: [{
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: 200,
+          },
+          legend: {
+            position: 'bottom',
+          },
+        },
+      }],
     },
-    series: [30, 40, 30],
+    series: [],
   },
-  {
-    title: 'Chart 4',
-    options: {
-      chart: {
-        type: 'pie',
-      },
-      labels: ['Product 1', 'Product 2', 'Product 3', 'Product 4'],
-    },
-    series: [300, 500, 200, 400],
-  },
+  // Fügen Sie hier weitere Charts hinzu, falls gewünscht
 ]);
 
-const updateCharts = () => {
-  charts.forEach((chart, index) => {
-    if (chart.options.chart.type === 'bar' || chart.options.chart.type === 'line') {
-      chart.series[0].data = Array.from({ length: 10 }, () => Math.floor(Math.random() * 100));
-    } else if (chart.options.chart.type === 'donut' || chart.options.chart.type === 'pie') {
-      chart.series = Array.from({ length: 3 }, () => Math.floor(Math.random() * 100));
-    }
+const recipeStore = useRecipeStore();
+
+const updateChartsWithRecipeData = () => {
+  const categoryCounts = {};
+
+  recipeStore.recipes.forEach(recipe => {
+    recipe.categories.forEach(category => {
+      categoryCounts[category] = (categoryCounts[category] || 0) + 1;
+    });
   });
+
+  const categories = Object.keys(categoryCounts);
+  const counts = Object.values(categoryCounts);
+
+  const categoryChartIndex = charts.findIndex(chart => chart.title === 'Rezepte pro Kategorie');
+  if (categoryChartIndex !== -1) {
+    const updatedChart = { ...charts[categoryChartIndex] };
+    updatedChart.options = { ...updatedChart.options, labels: categories };
+    updatedChart.series = counts;
+    charts[categoryChartIndex] = updatedChart;
+  }
 };
 
 onMounted(async () => {
   await nextTick();
-  updateCharts();
+  recipeStore.fetchRecipes().then(() => {
+    updateChartsWithRecipeData(); // Aktualisieren Sie die Charts, nachdem die Rezepte abgerufen wurden
+  });
 });
 </script>
+
+<style scoped>
+/* Stildefinitionen nach Bedarf */
+</style>
