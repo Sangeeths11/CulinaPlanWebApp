@@ -26,6 +26,7 @@ const register = async () => {
 };
 definePageMeta({
   layout: 'non',
+  middleware: ['auth-index'],
 })
 </script>
 <template>

@@ -15,7 +15,8 @@
 <script setup lang="ts">
 definePageMeta({
   title: 'Dashboard',
-  layout: 'default'
+  layout: 'default',
+  middleware: ['auth-index'],
 });
 const charts = reactive([
   {

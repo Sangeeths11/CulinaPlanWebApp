@@ -284,6 +284,9 @@ async function submitRecipeToSupabase(){
       alert('Fehler beim Speichern des Rezepts: ' + error.message);
       }
 }
+definePageMeta({
+  middleware: ['auth-index'],
+})
 
 </script>
 

@@ -121,4 +121,7 @@ const calenderUpdate = () => {
 onMounted(async () => {
   await fetchRecipeAssignments();
 });
+definePageMeta({
+  middleware: ['auth-index'],
+})
 </script>
