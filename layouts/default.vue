@@ -2,21 +2,25 @@
   <div>
     <div v-show="showSideNav" class="fixed inset-0 bg-gray-600 bg-opacity-50 z-50" @click="toggleSideNav"></div>
     <div v-show="showSideNav" class="fixed inset-y-0 left-0 bg-white shadow-md z-50 w-64 flex flex-col py-4 transform transition-transform duration-300" :class="{ '-translate-x-full': !showSideNav }">
-      <router-link to="/overview" class="px-6 py-3 text-lg font-semibold flex items-center space-x-4 hover:bg-gray-100">
+      <router-link to="/" class="px-6 py-3 text-lg font-semibold flex items-center space-x-4 hover:bg-gray-100">
         <Icon name="material-symbols:home-outline" class="h-6 w-6 text-blue-500" />
-        Home
+        <p>Home</p>
+      </router-link>
+      <router-link to="/overview" class="px-6 py-3 text-lg font-semibold flex items-center space-x-4 hover:bg-gray-100">
+        <Icon name="material-symbols:overview-key-outline" class="h-6 w-6 text-blue-500" />
+        <p>Overview</p>
       </router-link>
       <router-link to="/dashboard" class="px-6 py-3 text-lg font-semibold flex items-center space-x-4 hover:bg-gray-100">
         <Icon name="material-symbols:dashboard-outline" class="h-6 w-6 text-blue-500" />
-        Dashboard
+        <p>Dashboard</p>
       </router-link>
       <router-link to="/calenderView" class="px-6 py-3 text-lg font-semibold flex items-center space-x-4 hover:bg-gray-100">
         <Icon name="uil:calender" class="h-6 w-6 text-blue-500" />
-        Kalender
+        <p>Kalender</p>
       </router-link>
       <router-link to="/profile" class="px-6 py-3 text-lg font-semibold flex items-center space-x-4 hover:bg-gray-100">
         <Icon name="iconamoon:profile" class="h-6 w-6 text-blue-500" />
-        Profile
+        <p>Profil</p>
       </router-link>
     </div>
 

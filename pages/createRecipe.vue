@@ -1,7 +1,16 @@
 <template>
   <div class="min-h-screen bg-gray-100 p-4 md:p-10">
+
     <h1 class="text-3xl font-bold mb-6">Rezept erstellen</h1>
     <form @submit.prevent="submitRecipeToSupabase" class="bg-white shadow-md rounded px-4 md:px-8 pt-6 pb-8 mb-4">
+      <div v-if="errorMessage" class="mb-4 w-full">
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <strong class="font-bold">
+          <Icon name="ic:round-error" class="w-5 h-5 inline-block" />
+        </strong>
+        <span class="block sm:inline pl-2">{{ errorMessage }}</span>
+      </div>
+    </div>
       <div v-if="uploadedImage" class="mb-4 flex justify-center items-center">
         <img :src="uploadedImage" class="max-w-full h-auto max-h-60" alt="Hochgeladenes Bild" style="object-fit: contain;">
       </div>
@@ -21,7 +30,7 @@
       </div>
       <div class="mb-4">
         <label for="recipeName" class="block text-gray-700 text-sm font-bold mb-2">Rezeptname</label>
-        <input type="text" id="recipeName" v-model="recipeName" v-on:keyup.enter="generateRecipe" placeholder="Geben Sie einen Rezeptnamen ein und drücken Sie Enter" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        <input type="text" id="recipeName" v-model="recipeName" v-on:keyup.enter="generateRecipe" placeholder="Geben Sie einen Rezeptnamen ein und wählen Sie die AI um ihnen den Rezept vorschlag zu machen" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
       </div>
       <div class="mb-4">
         <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
@@ -119,6 +128,7 @@ const { chatCompletion } = useChatgpt()
 const recipeName = ref('');
 const generatedRecipe = ref('');
 const router = useRouter();
+const errorMessage = ref('');
 
 
 const generateRecipe = async () => {
@@ -193,6 +203,7 @@ const selectedAllergies = ref([]);
 const selectedCategories = ref([]);
 
 
+
 const addIngredient = () => {
   recipe.value.ingredients.push({ name: '', price: 0 });
 };
@@ -218,8 +229,7 @@ const handleImageUpload = async (event) => {
       .upload(uniqueFileName, file);
 
     if (uploadError) {
-      alert(`Error uploading image: ${uploadError.message}`);
-      console.error('Error uploading image:', uploadError);
+      errorMessage.value = uploadError.message;
       return;
     }
     else {
@@ -280,8 +290,7 @@ async function submitRecipeToSupabase(){
 
       router.push({ path: "/overview" })
       } catch (error) {
-      console.error('Fehler beim Speichern:', error);
-      alert('Fehler beim Speichern des Rezepts: ' + error.message);
+      errorMessage.value = error.message;
       }
 }
 definePageMeta({

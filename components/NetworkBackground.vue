@@ -2,9 +2,6 @@
   <div class="relative h-screen w-screen color" >
     <canvas ref="canvas" class="w-full h-full"></canvas>
     <div class="absolute inset-0 flex flex-col items-center justify-center text-white">
-      <div class="absolute top-0 right-0 p-5">
-        <LoginButton/>
-      </div>
       <div class="text-center">
         <h1 class="text-6xl font-bold">
           Welcome to CulinaPlan

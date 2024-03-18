@@ -5,6 +5,7 @@ const router = useRouter();
 const email = ref('');
 const password = ref('');
 const confirmPassword = ref('');
+const errorMessage = ref('');
 
 const register = async () => {
   if (password.value !== confirmPassword.value) {
@@ -18,7 +19,7 @@ const register = async () => {
   });
 
   if (error) {
-    console.log(error.message);
+    errorMessage.value = error.message;
   } else {
     console.log("Registration successful, redirecting...");
     router.push('/login');
@@ -32,6 +33,14 @@ definePageMeta({
 <template>
   <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
     <div class="bg-white p-6 rounded shadow-md w-full max-w-md">
+      <div v-if="errorMessage" class="mb-4 w-full">
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+          <strong class="font-bold">
+            <Icon name="ic:round-error" class="w-5 h-5 inline-block" />
+          </strong>
+          <span class="block sm:inline pl-2">{{ errorMessage }}</span>
+        </div>
+      </div>
       <h1 class="text-2xl md:text-3xl font-bold mb-4 text-center">Sign Up</h1>
       <div class="flex items-center justify-center mb-6">
         <img src="assets/spoon.png" alt="Logo" class="w-16 h-16 rounded-full">
