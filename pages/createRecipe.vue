@@ -175,6 +175,7 @@ const generateRecipe = async () => {
       
       console.log('Rezeptvorschlag wurde generiert.')
     } catch (error) {
+      errorMessage.value = error.message;
       console.log('Fehler beim Generieren des Rezeptvorschlags: ' + error.message)
     }finally {
       isLoading.value = false;
@@ -264,6 +265,14 @@ const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 
 async function submitRecipeToSupabase(){
+  // Verwende eine Regular Expression, um alle Zahlen im String zu finden
+  const proteinsExtract = generatedRecipe.value.Proteins.match(/\d+/g);
+  const carbohydratesExtract = generatedRecipe.value.Carbohydrates.match(/\d+/g);
+
+
+  const protein = proteinsExtract ? parseInt(proteinsExtract[0], 10) : null;
+  const carbohydrates = carbohydratesExtract ? parseInt(carbohydratesExtract[0], 10) : null;
+
   try {
     const { data: recipeData, error: recipeError  } = await supabase
       .from('recepies')
@@ -275,7 +284,10 @@ async function submitRecipeToSupabase(){
           categories: selectedCategories.value,
           typ: selectedTyp.value[0],
           image_url: uploadedImage.value,
-          user_id: user.value.id
+          user_id: user.value.id,
+          proteins: protein,
+          carbohydrates: carbohydrates,
+          priceTotal: calculateTotalCost.value
         }
       ]).select();
       
