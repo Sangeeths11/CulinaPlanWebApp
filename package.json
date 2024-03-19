@@ -13,7 +13,7 @@
   "dependencies": {
     "@pinia/nuxt": "^0.5.1",
     "apexcharts": "^3.47.0",
-    "nuxt": "^3.11.0",
+    "nuxt": "^3.11.1",
     "pinia": "^2.1.7",
     "playwright": "^1.42.1",
     "vue": "^3.4.21",
@@ -26,7 +26,7 @@
     "@samk-dev/nuxt-vcalendar": "^1.0.2",
     "@vue/test-utils": "^2.4.5",
     "autoprefixer": "^10.4.18",
-    "happy-dom": "^13.10.0",
+    "happy-dom": "^13.10.1",
     "nuxt-chatgpt": "^0.2.3",
     "nuxt-icon": "^0.6.9",
     "playwright-core": "^1.42.1",
