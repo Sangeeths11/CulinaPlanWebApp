@@ -185,7 +185,7 @@ const updateCalendarAssignmentsChart = () => {
           categories: dates2,
         },
         stroke: {
-          curve: 'smooth' // Option für glatte Linien
+          curve: 'smooth'
         },
         fill: {
           type: 'gradient',
@@ -198,11 +198,11 @@ const updateCalendarAssignmentsChart = () => {
           }
         },
         dataLabels: {
-          enabled: false // Stellt sicher, dass Datenbeschriftungen global deaktiviert sind
+          enabled: false
         },
         tooltip: {
           x: {
-            format: 'dd/MM/yy' // Formatiert das Datum im Tooltip
+            format: 'dd/MM/yy'
           },
         },
       },
