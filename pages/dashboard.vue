@@ -20,30 +20,7 @@ definePageMeta({
   middleware: ['auth-index'],
 });
 
-const charts = reactive([
-  {
-    title: 'Rezepte pro Kategorie',
-    options: {
-      chart: {
-        type: 'donut',
-      },
-      labels: [],
-      responsive: [{
-        breakpoint: 480,
-        options: {
-          chart: {
-            width: 200,
-          },
-          legend: {
-            position: 'bottom',
-          },
-        },
-      }],
-    },
-    series: [],
-  },
-
-]);
+const charts = reactive([]);
 
 const recipeStore = useRecipeStore();
 
@@ -73,6 +50,29 @@ const updateChartsWithRecipeData = () => {
     updatedCategoryChart.options = { ...updatedCategoryChart.options, labels: categories };
     updatedCategoryChart.series = categoryCountsValues;
     charts[categoryChartIndex] = updatedCategoryChart;
+  }
+  else {
+    charts.push({
+      title: 'Rezepte pro Kategorie',
+      options: {
+        chart: {
+          type: 'donut',
+        },
+        labels: categories,
+        responsive: [{
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 200,
+            },
+            legend: {
+              position: 'bottom',
+            },
+          },
+        }],
+      },
+      series: categoryCountsValues,
+    });
   }
 
 
@@ -107,10 +107,127 @@ const updateChartsWithRecipeData = () => {
   }
 };
 
+const updateCalendarAssignmentsChart = () => {
+  let dataPerDate = recipeStore.calenderAssignments.reduce((acc, curr) => {
+    const date = curr.date.split('T')[0];
+    const total = Object.values(curr).reduce((sum, meal) => {
+      return sum + (meal.priceTotal || 0);
+    }, 0);
+
+    acc[date] = (acc[date] || 0) + total;
+    return acc;
+  }, {});
+
+  const dates = Object.keys(dataPerDate);
+  const totals = Object.values(dataPerDate);
+
+  const chartIndex = charts.findIndex(chart => chart.title === 'Ausgaben pro Tag');
+  if (chartIndex !== -1) {
+    const updatedChart = { ...charts[chartIndex] };
+    updatedChart.options = { ...updatedChart.options, labels: dates };
+    updatedChart.series = totals;
+    charts[chartIndex] = updatedChart;
+  } else {
+    charts.push({
+      title: 'Ausgaben pro Tag',
+      options: {
+        chart: {
+          type: 'bar',
+        },
+        plotOptions: {
+          bar: {
+            borderRadius: 4,
+            horizontal: false, // oder false, je nachdem, wie Sie es möchten
+          }
+        },
+        xaxis: {
+          categories: dates,
+        },
+        dataLabels: {
+          enabled: false // Stellt sicher, dass Datenbeschriftungen global deaktiviert sind
+        },
+      },
+      series: [
+        {
+          name: 'Ausgaben',
+          data: totals,
+        },
+      ],
+    });
+  }
+  let dataPerDate2 = recipeStore.calenderAssignments.reduce((acc, curr) => {
+    const date = curr.date.split('T')[0];
+    const total = Object.values(curr).reduce((sum, meal) => {
+      return sum + (meal.proteins || 0);
+    }, 0);
+
+    acc[date] = (acc[date] || 0) + total;
+    return acc;
+  }, {});
+
+  const dates2 = Object.keys(dataPerDate2);
+  const totals2 = Object.values(dataPerDate2);
+
+  const chartIndex2 = charts.findIndex(chart => chart.title === 'Protein pro Tag');
+  if (chartIndex2 !== -1) {
+    const updatedChart = { ...charts[chartIndex2] };
+    updatedChart.options = { ...updatedChart.options, labels: dates };
+    updatedChart.series = totals;
+    charts[chartIndex2] = updatedChart;
+  } else {
+    charts.push({
+      title: 'Protein pro Tag',
+      options: {
+        chart: {
+          type: 'area',
+        },
+        xaxis: {
+          categories: dates2,
+        },
+        stroke: {
+          curve: 'smooth' // Option für glatte Linien
+        },
+        fill: {
+          type: 'gradient',
+          gradient: {
+            shadeIntensity: 1,
+            inverseColors: false,
+            opacityFrom: 0.5,
+            opacityTo: 0.0,
+            stops: [0, 90, 100]
+          }
+        },
+        dataLabels: {
+          enabled: false // Stellt sicher, dass Datenbeschriftungen global deaktiviert sind
+        },
+        tooltip: {
+          x: {
+            format: 'dd/MM/yy' // Formatiert das Datum im Tooltip
+          },
+        },
+      },
+      series: [
+        {
+          name: 'Protein',
+          data: totals2,
+        },
+      ],
+    });
+  }
+};
+
+
 onMounted(async () => {
   await nextTick();
   recipeStore.fetchRecipes().then(() => {
-    updateChartsWithRecipeData();
+    recipeStore.fetchCalenderAssignments().then(() => {
+      updateChartsWithRecipeData();
+      updateCalendarAssignmentsChart();
+    });
+  });
+
+  recipeStore.fetchCalenderAssignments().then(() => {
+    updateCalendarAssignmentsChart();
   });
 });
 </script>
