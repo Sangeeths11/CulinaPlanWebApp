@@ -8,13 +8,21 @@
     <h1 class="text-3xl font-bold mb-6">Rezept erstellen</h1>
     <form @submit.prevent="submitRecipeToSupabase" class="bg-white shadow-md rounded px-4 md:px-8 pt-6 pb-8 mb-4">
       <div v-if="errorMessage" class="mb-4 w-full">
-      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-        <strong class="font-bold">
-          <Icon name="ic:round-error" class="w-5 h-5 inline-block" />
-        </strong>
-        <span class="block sm:inline pl-2">{{ errorMessage }}</span>
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+          <strong class="font-bold">
+            <Icon name="ic:round-error" class="w-5 h-5 inline-block" />
+          </strong>
+          <span class="block sm:inline pl-2">{{ errorMessage }}</span>
+        </div>
       </div>
-    </div>
+      <div v-if="successMessage" class="mb-4 w-full">
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="info">
+          <strong class="font-bold">
+            <Icon name="ic:round-error" class="w-5 h-5 inline-block" />
+          </strong>
+          <span class="block sm:inline pl-2">{{ successMessage }}</span>
+        </div>
+      </div>
       <div v-if="uploadedImage" class="mb-4 flex justify-center items-center">
         <img :src="uploadedImage" class="max-w-full h-auto max-h-60" alt="Hochgeladenes Bild" style="object-fit: contain;">
       </div>
@@ -133,6 +141,7 @@ const recipeName = ref('');
 const generatedRecipe = ref('');
 const router = useRouter();
 const errorMessage = ref('');
+const successMessage = ref('');
 const isLoading = ref(false);
 
 
@@ -174,6 +183,7 @@ const generateRecipe = async () => {
       generatedRecipe.value = responseData;
       
       console.log('Rezeptvorschlag wurde generiert.')
+      successMessage.value = 'AI Rezeptvorschlag wurde generiert.';
     } catch (error) {
       errorMessage.value = error.message;
       console.log('Fehler beim Generieren des Rezeptvorschlags: ' + error.message)
@@ -215,7 +225,7 @@ const selectedCategories = ref([]);
 
 
 const addIngredient = () => {
-  recipe.value.ingredients.push({ name: '', price: 0 });
+  recipe.value.ingredients.push({ name: '', price: 0, quantity: 0});
 };
 
 const removeIngredient = (index: number) => {

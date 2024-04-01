@@ -825,13 +825,13 @@
     vite-plugin-checker "^0.6.4"
     vue-bundle-renderer "^2.0.0"
 
-"@nuxtjs/supabase@^1.1.7":
-  version "1.1.7"
-  resolved "https://registry.npmjs.org/@nuxtjs/supabase/-/supabase-1.1.7.tgz"
-  integrity sha512-A6nwAA3JjIxMyLvRqBowoALW3U5LVWHP6mK2oXdYsn7nDH0FH9Z3P0ZXr1ivS8RN5CPXkRAW9kuZE/iXuyFILg==
+"@nuxtjs/supabase@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.npmjs.org/@nuxtjs/supabase/-/supabase-1.2.0.tgz"
+  integrity sha512-HYII/FX4+39Rt+KLc9zlidNf43OGHvEf4xW+cKyL84Jky0BFuw7wYmCoHZdj7euBrKPnsp0lzPbrnvS+fE6kNA==
   dependencies:
-    "@nuxt/kit" "^3.10.3"
-    "@supabase/supabase-js" "2.39.7"
+    "@nuxt/kit" "^3.11.1"
+    "@supabase/supabase-js" "2.41.1"
     defu "^6.1.4"
     pathe "^1.1.2"
 
@@ -1049,17 +1049,17 @@
   resolved "https://registry.npmjs.org/@sindresorhus/merge-streams/-/merge-streams-2.3.0.tgz"
   integrity sha512-LtoMMhxAlorcGhmFYI+LhPgbPZCkgP6ra1YL604EeF6U98pLlQ3iWIGMdWSC+vWmPBWBNgmDBAhnAobLROJmwg==
 
-"@supabase/functions-js@2.1.5":
-  version "2.1.5"
-  resolved "https://registry.npmjs.org/@supabase/functions-js/-/functions-js-2.1.5.tgz"
-  integrity sha512-BNzC5XhCzzCaggJ8s53DP+WeHHGT/NfTsx2wUSSGKR2/ikLFQTBCDzMvGz/PxYMqRko/LwncQtKXGOYp1PkPaw==
+"@supabase/auth-js@2.63.0":
+  version "2.63.0"
+  resolved "https://registry.npmjs.org/@supabase/auth-js/-/auth-js-2.63.0.tgz"
+  integrity sha512-yIgcHnlgv24GxHtVGUhwGqAFDyJkPIC/xjx7HostN08A8yCy8HIfl4JEkTKyBqD1v1L05jNEJOUke4Lf4O1+Qg==
   dependencies:
     "@supabase/node-fetch" "^2.6.14"
 
-"@supabase/gotrue-js@2.62.2":
-  version "2.62.2"
-  resolved "https://registry.npmjs.org/@supabase/gotrue-js/-/gotrue-js-2.62.2.tgz"
-  integrity sha512-AP6e6W9rQXFTEJ7sTTNYQrNf0LCcnt1hUW+RIgUK+Uh3jbWvcIST7wAlYyNZiMlS9+PYyymWQ+Ykz/rOYSO0+A==
+"@supabase/functions-js@2.2.2":
+  version "2.2.2"
+  resolved "https://registry.npmjs.org/@supabase/functions-js/-/functions-js-2.2.2.tgz"
+  integrity sha512-sJGq1nludmi7pY/fdtCpyY/pYonx7MfHdN408bqb736guWcVI1AChYVbI4kUM978EuOE4Ci6l7bUudfGg07QRw==
   dependencies:
     "@supabase/node-fetch" "^2.6.14"
 
@@ -1094,13 +1094,13 @@
   dependencies:
     "@supabase/node-fetch" "^2.6.14"
 
-"@supabase/supabase-js@2.39.7":
-  version "2.39.7"
-  resolved "https://registry.npmjs.org/@supabase/supabase-js/-/supabase-js-2.39.7.tgz"
-  integrity sha512-1vxsX10Uhc2b+Dv9pRjBjHfqmw2N2h1PyTg9LEfICR3x2xwE24By1MGCjDZuzDKH5OeHCsf4it6K8KRluAAEXA==
+"@supabase/supabase-js@2.41.1":
+  version "2.41.1"
+  resolved "https://registry.npmjs.org/@supabase/supabase-js/-/supabase-js-2.41.1.tgz"
+  integrity sha512-xmECLhYugMo/6SObpsOhu5xaxVfsk+JK/d4JSh055bpESmgmN3PLpzbfqejKCpaUeeUNF21+lrJp/U9HQzT9mA==
   dependencies:
-    "@supabase/functions-js" "2.1.5"
-    "@supabase/gotrue-js" "2.62.2"
+    "@supabase/auth-js" "2.63.0"
+    "@supabase/functions-js" "2.2.2"
     "@supabase/node-fetch" "2.6.15"
     "@supabase/postgrest-js" "1.9.2"
     "@supabase/realtime-js" "2.9.3"

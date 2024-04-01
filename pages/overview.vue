@@ -94,13 +94,13 @@ const applyFilter = (filterData) => {
           <h2 class="text-xl font-bold mb-2">{{ recipe.name }}</h2>
           <p class="text-gray-700 text-base mb-2">{{ recipe.description }}</p>
           <div class="flex flex-wrap">
-            <span v-for="tag in recipe.allergies" :key="tag" class="text-xs font-semibold mr-2 px-2.5 py-0.5 rounded bg-red-100 text-red-800">
+            <span v-for="tag in recipe.allergies" :key="tag" class="text-xs font-semibold mr-2 px-2.5 py-0.5 mt-2 rounded bg-red-100 text-red-800">
               {{ tag }}
             </span>
-            <span v-for="tag in recipe.categories" :key="tag" class="text-xs font-semibold mr-2 px-2.5 py-0.5 rounded bg-blue-100 text-blue-800">
+            <span v-for="tag in recipe.categories" :key="tag" class="text-xs font-semibold mr-2 px-2.5 py-0.5 mt-2 rounded bg-blue-100 text-blue-800">
               {{ tag }}
             </span>
-            <span class="text-xs font-semibold mr-2 px-2.5 py-0.5 rounded bg-green-100 text-green-800">
+            <span class="text-xs font-semibold mr-2 px-2.5 py-0.5 mt-2 rounded bg-green-100 text-green-800">
               {{ recipe.typ }}
             </span>
           </div>
