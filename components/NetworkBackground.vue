@@ -1,7 +1,7 @@
 <template>
   <div class="relative h-screen w-screen color" >
     <canvas ref="canvas" class="w-full h-full"></canvas>
-    <div class="absolute inset-0 flex flex-col items-center justify-center text-white">
+    <div class="absolute inset-0 flex flex-col items-center justify-center text-black">
       <div class="text-center">
         <h1 class="text-6xl font-bold">
           Welcome to CulinaPlan
@@ -64,7 +64,7 @@ export default defineComponent({
           ctx.clearRect(0, 0, canvas.value.width, canvas.value.height);
 
           // Linien
-          ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+          ctx.strokeStyle = 'rgb(243, 239, 255, 0.9)';
 
           nodes.forEach(node => {
             nodes.forEach(otherNode => {
@@ -79,7 +79,7 @@ export default defineComponent({
           });
 
           // Kreise
-          ctx.fillStyle = 'rgba(0, 230, 255, 0.5)'; 
+          ctx.fillStyle = 'rgb(59, 130, 246, 1)'; 
 
           nodes.forEach(node => {
             ctx.beginPath();
@@ -123,6 +123,6 @@ export default defineComponent({
 
 <style scoped>
   .color {
-    background-color: #0B0C10;
+    background-color: white;
   }
 </style>
