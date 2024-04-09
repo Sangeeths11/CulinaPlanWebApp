@@ -13,10 +13,10 @@
   "dependencies": {
     "@pinia/nuxt": "^0.5.1",
     "apexcharts": "^3.48.0",
-    "nuxt": "^3.11.1",
+    "nuxt": "^3.11.2",
     "pinia": "^2.1.7",
-    "playwright": "^1.42.1",
-    "typescript": "^5.4.3",
+    "playwright": "^1.43.0",
+    "typescript": "^5.4.4",
     "vue": "^3.4.21",
     "vue-router": "4.3.0",
     "vue3-apexcharts": "^1.5.2"
@@ -24,16 +24,16 @@
   "devDependencies": {
     "@nuxt/test-utils": "^3.12.0",
     "@nuxtjs/supabase": "^1.2.0",
-    "@samk-dev/nuxt-vcalendar": "^1.0.2",
+    "@samk-dev/nuxt-vcalendar": "^1.0.3",
     "@vue/test-utils": "^2.4.5",
     "autoprefixer": "^10.4.19",
-    "cypress": "^13.7.1",
+    "cypress": "^13.7.2",
     "happy-dom": "^13.10.1",
     "nuxt-chatgpt": "^0.2.3",
     "nuxt-icon": "^0.6.10",
-    "playwright-core": "^1.42.1",
+    "playwright-core": "^1.43.0",
     "postcss": "^8.4.38",
-    "sass": "^1.72.0",
+    "sass": "^1.74.1",
     "tailwindcss": "^3.4.3",
     "vitest": "^1.4.0"
   }
