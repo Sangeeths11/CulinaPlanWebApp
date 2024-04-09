@@ -38,7 +38,7 @@ export const useRecipeStore = defineStore('recipeStore', () => {
         query = query.contains('allergies', [filterData.allergy]);
       }
       if (filterData.typ && filterData.typ !== 'Beide') {
-        query = query.contains('typ', filterData.typ);
+        query = query.eq('typ', String(filterData.typ));
       }
     }
 
