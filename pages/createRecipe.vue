@@ -147,6 +147,7 @@ const router = useRouter();
 const errorMessage = ref('');
 const successMessage = ref('');
 const isLoading = ref(false);
+const recipeStore = useRecipeStore();
 
 const generateRecipe = async () => {
   if (recipeName.value.trim() !== '') {
@@ -280,43 +281,23 @@ async function submitRecipeToSupabase(){
   const protein = proteinsExtract ? parseInt(proteinsExtract[0], 10) : null;
   const carbohydrates = carbohydratesExtract ? parseInt(carbohydratesExtract[0], 10) : null;
 
+  const recipeDetails = {
+    name: recipeName.value,
+    description: recipe.value.description,
+    allergies: selectedAllergies.value,
+    categories: selectedCategories.value,
+    typ: selectedTyp.value[0],
+    image_url: uploadedImage.value,
+    user_id: user.value.id,
+    proteins: protein,
+    carbohydrates: carbohydrates,
+    priceTotal: calculateTotalCost.value
+  }
+  
+
   try {
-    const { data: recipeData, error: recipeError  } = await supabase
-      .from('recepies')
-      .insert([
-        {
-          name: recipeName.value,
-          description: recipe.value.description,
-          allergies: selectedAllergies.value,
-          categories: selectedCategories.value,
-          typ: selectedTyp.value[0],
-          image_url: uploadedImage.value,
-          user_id: user.value.id,
-          proteins: protein,
-          carbohydrates: carbohydrates,
-          priceTotal: calculateTotalCost.value
-        }
-      ]).select();
-      
-      console.log(recipeData[0].id);
-
-      if (recipeError) throw recipeError;
-      const ingredientsWithRecipeId = recipe.value.ingredients.map(ingredient => ({
-        name: ingredient.name,
-        price: ingredient.price,
-        quantity: ingredient.quantity,
-        recepie_id: recipeData[0].id
-      }));
-      
-      console.log(ingredientsWithRecipeId);
-
-      const { error: ingredientsError } = await supabase
-        .from('ingredients')
-        .insert (ingredientsWithRecipeId);
-
-      if (ingredientsError) throw ingredientsError;
-
-      router.push({ path: "/overview" })
+    // Validation implementieren hier
+    recipeStore.saveRecipe(recipeDetails, recipe.value.ingredients);
       } catch (error) {
       errorMessage.value = error.message;
       }

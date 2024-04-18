@@ -1,6 +1,7 @@
 export const useRecipeStore = defineStore('recipeStore', () => {
   const client = useSupabaseClient();
   const user = useSupabaseUser();
+  const router = useRouter();
   const currentRecipe = ref(null);
   const recipes = ref([]);
   const filteredRecipes = ref([]);
@@ -70,39 +71,6 @@ export const useRecipeStore = defineStore('recipeStore', () => {
     }
   };
 
-  const updateRecipe = async () => {
-      const { data, error } = await client
-          .from('recepies')
-          .update({
-              name: currentRecipe.value.name,
-              ingredients: currentRecipe.value.ingredients,
-              instructions: currentRecipe.value.instructions
-          })
-          .eq('id', currentRecipe.value.id);
-      if (error) {
-          console.error('Error updating recipe', error);
-      } else {
-          await fetchRecipes();
-      }
-  };
-
-  const newRecipe = async () => {
-      const { data, error } = await client
-          .from('recepies')
-          .insert({
-              name: 'New Recipe',
-              ingredients: '',
-              instructions: '',
-              user_id: user.value.id
-          });
-      if (error) {
-          console.error('Error creating recipe', error);
-      } else {
-          await fetchRecipes();
-          setCurrentRecipe(recipes.value[recipes.value.length - 1]);
-      }
-  };
-
   const deleteRecipe = async (recipe) => {
       const { data, error } = await client
           .from('recepies')
@@ -120,6 +88,45 @@ export const useRecipeStore = defineStore('recipeStore', () => {
       }
   };
 
+  const saveRecipe = async (recipeDetails, ingredientsDetails) => {
+    const { data: recipeData, error: recipeError  } = await client
+      .from('recepies')
+      .insert([
+        {
+          name: recipeDetails.name,
+          description: recipeDetails.description,
+          allergies: recipeDetails.allergies,
+          categories: recipeDetails.categories,
+          typ: recipeDetails.typ,
+          image_url: recipeDetails.image_url,
+          user_id: recipeDetails.user_id,
+          proteins: recipeDetails.proteins,
+          carbohydrates: recipeDetails.carbohydrates,
+          priceTotal: recipeDetails.priceTotal
+        }
+      ]).select();
+      
+      console.log(recipeData[0].id);
+
+      if (recipeError) throw recipeError;
+      const ingredientsWithRecipeId = ingredientsDetails.map(ingredient => ({
+        name: ingredient.name,
+        price: ingredient.price,
+        quantity: ingredient.quantity,
+        recepie_id: recipeData[0].id
+      }));
+      
+      console.log(ingredientsWithRecipeId);
+
+      const { error: ingredientsError } = await client
+        .from('ingredients')
+        .insert (ingredientsWithRecipeId);
+
+      if (ingredientsError) throw ingredientsError;
+
+      router.push({ path: "/overview" })
+  };
+
   return {
       calenderAssignments,
       currentRecipe,
@@ -127,8 +134,7 @@ export const useRecipeStore = defineStore('recipeStore', () => {
       setCurrentRecipe,
       fetchCalenderAssignments,
       fetchRecipes,
-      updateRecipe,
-      newRecipe,
-      deleteRecipe
+      deleteRecipe,
+      saveRecipe
   };
 });
