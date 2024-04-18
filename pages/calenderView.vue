@@ -1,4 +1,12 @@
 <template>
+  <div v-if="calenderStore.errorMessage" class="mb-4 w-full">
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+      <strong class="font-bold">
+        <Icon name="ic:round-error" class="w-5 h-5 inline-block" />
+      </strong>
+      <span class="block sm:inline pl-2">{{ calenderStore.errorMessage }}</span>
+    </div>
+  </div>
   <div class="min-h-screen bg-gray-100 p-4 md:p-10">
     <h1 class="text-3xl font-bold mb-6">Mein Kalender</h1>
     <div class="mb-6">
@@ -44,47 +52,14 @@ const assignRecipe = (date, recipe) => {
   const supabase = useSupabaseClient()
   const router = useRouter()
   console.log(date);
-  saveRecipeAssignment(formattedDate, date);
-};
-
-const saveRecipeAssignment = async (date, recipe) => {
-  const { data, error } = await supabase
-    .from('calender')
-    .insert(
-      {
-        'date': date,
-        'morning_id': recipe['morgen']['id'],
-        'lunch_id': recipe['lunch']['id'],
-        'evening_id': recipe['evening']['id'],
-        'snack_id': recipe['snack']['id'],
-      },
-    );
-  if (error) {
-    console.error('Error saving recipe assignment:', error);
-  } else {
-    console.log('Recipe assignment saved:', data);
-    fetchRecipeAssignments();
-  }
+  calenderStore.saveRecipeAssignment(formattedDate, date);
+  fetchRecipeAssignments();
 };
 
 const fetchRecipeAssignments = async () => {
-  const { data, error } = await supabase
-    .from('calender')
-    .select(`
-      date,
-      morning:morning_id (name),
-      lunch:lunch_id (name),
-      evening:evening_id (name),
-      snack:snack_id (name)
-    `);
-
-  if (error) {
-    console.error('Error fetching recipe assignments with joins:', error);
-    return;
-  }
-  
+  await calenderStore.fetchCalenderAssignments();
   const assignments = {};
-  for (const item of data) {
+  for (const item of calenderStore.calenderAssignments) {
     const { date, morning, lunch, evening, snack } = item;
     assignments[date] = {
       morning: morning ? { id: morning.id, name: morning.name } : undefined,
