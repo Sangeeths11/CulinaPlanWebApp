@@ -2,22 +2,36 @@ export const useRecipeStore = defineStore('recipeStore', () => {
   const client = useSupabaseClient();
   const user = useSupabaseUser();
   const router = useRouter();
-  const currentRecipe = ref(null);
+  const currentRecipe = ref([]);
+  const currentIngredients = ref([]);
   const recipes = ref([]);
   const filteredRecipes = ref([]);
   const calenderAssignments = ref([]);
 
-  const setCurrentRecipe = async (recipe) => {
+  const fetchRecipe = async (recipe) => {
       const { data, error } = await client
-          .from('recepies')
-          .select('*')
-          .eq('id', recipe.id)
-          .single();
+        .from('recepies')
+        .select('*')
+        .eq('id', recipe)
+        .single();
       if (error) {
           console.error('Error loading recipe', error);
       } else {
+          console.log('data', data);
           currentRecipe.value = data;
       }
+  };
+
+  const fetchIngredients = async (recipe) => {
+    const { data: ingredientsData, error: ingredientsError } = await client
+    .from('ingredients')
+    .select('*')
+    .eq('recepie_id', recipe);
+    if (ingredientsError) {
+      console.error('Fehler beim Laden der Zutaten:', ingredientsError);
+      return;
+    }
+    currentIngredients.value = ingredientsData;
   };
 
   const fetchRecipes = async (filterData = null) => {
@@ -130,9 +144,11 @@ export const useRecipeStore = defineStore('recipeStore', () => {
   return {
       calenderAssignments,
       currentRecipe,
+      currentIngredients,
       recipes,
-      setCurrentRecipe,
+      fetchRecipe,
       fetchCalenderAssignments,
+      fetchIngredients,
       fetchRecipes,
       deleteRecipe,
       saveRecipe

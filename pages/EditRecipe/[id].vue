@@ -120,6 +120,7 @@ const recipeName = ref('');
 const generatedRecipe = ref('');
 const route = useRoute();
 const router = useRouter();
+const recepieStore = useRecipeStore();
 
 
 const generateRecipe = async () => {
@@ -287,15 +288,10 @@ async function submitRecipeToSupabase() {
 
 
 async function fetchRecipe(id){
-  const { data: recipeData, error: recipeError } = await supabase
-    .from('recepies')
-    .select('*')
-    .eq('id', id)
-    .single();
-  if (recipeError) {
-    console.error('Fehler beim Laden des Rezepts:', recipeError);
-    return;
-  }
+  await recepieStore.fetchRecipe(id);
+  const recipeData = recepieStore.currentRecipe
+  
+  console.log(recipeData.name);
   recipeName.value = recipeData.name;
   recipe.value.description = recipeData.description;
   selectedAllergies.value = recipeData.allergies;
@@ -305,15 +301,9 @@ async function fetchRecipe(id){
 }
 
 async function getIngredients(id){
-  const { data: ingredientsData, error: ingredientsError } = await supabase
-    .from('ingredients')
-    .select('*')
-    .eq('recepie_id', id);
-  if (ingredientsError) {
-    console.error('Fehler beim Laden der Zutaten:', ingredientsError);
-    return;
-  }
-  recipe.value.ingredients = ingredientsData;
+  await recepieStore.fetchIngredients(id);
+  console.log(recepieStore.currentIngredients);
+  recipe.value.ingredients = recepieStore.currentIngredients
 }
 
 onMounted(() => {

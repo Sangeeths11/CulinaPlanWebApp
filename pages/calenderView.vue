@@ -53,6 +53,7 @@ const assignRecipe = (date, recipe) => {
   const router = useRouter()
   console.log(date);
   calenderStore.saveRecipeAssignment(formattedDate, date);
+  calenderStore.fetchCalenderAssignments();
   fetchRecipeAssignments();
 };
 
