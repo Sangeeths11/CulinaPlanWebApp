@@ -13,15 +13,14 @@
 </template>
 
 <script setup lang="ts">
-const categoryCounts = {};
 definePageMeta({
   title: 'Dashboard',
   layout: 'default',
   middleware: ['auth-index'],
 });
 
+const categoryCounts = {};
 const charts = reactive([]);
-
 const recipeStore = useRecipeStore();
 
 const updateChartsWithRecipeData = () => {
@@ -215,7 +214,6 @@ const updateCalendarAssignmentsChart = () => {
     });
   }
 };
-
 
 onMounted(async () => {
   await nextTick();

@@ -2,7 +2,10 @@
 const supabase = useSupabaseClient()
 const router = useRouter()
 const errorMessage = ref('');
-
+definePageMeta({
+  middleware: ['auth-index'],
+  layout: 'non',
+})
 
 const email = ref('')
 const password = ref('')
@@ -20,10 +23,6 @@ const login = async () => {
       router.push('/overview');
     }
 }
-definePageMeta({
-  middleware: ['auth-index'],
-  layout: 'non',
-})
 </script>
 
 <template>

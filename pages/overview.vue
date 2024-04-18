@@ -1,4 +1,10 @@
 <script setup lang="ts">
+definePageMeta({
+  title: 'Rezepte Übersicht',
+  middleware: ['auth-index'],
+  layout: 'default',
+});
+
 const supabase = useSupabaseClient()
 const recipeStore = useRecipeStore();
 const showDeleteButton = ref(false);
@@ -7,16 +13,6 @@ const showEditButton = ref(false);
 const router = useRouter();
 const deleteConfirmationModal = ref(null);
 const recipeToDelete = ref(null);
-
-definePageMeta({
-  title: 'Rezepte Übersicht',
-  middleware: ['auth-index'],
-  layout: 'default',
-});
-
-onMounted(() => {
-  recipeStore.fetchRecipes();
-});
 
 const openCreateRecipeModal = () => {
   router.push('/createRecipe');
@@ -65,6 +61,10 @@ const applyFilter = (filterData) => {
   console.log('Filter angewendet:', filterData);
   recipeStore.fetchRecipes(filterData);
 };
+
+onMounted(() => {
+  recipeStore.fetchRecipes();
+});
 </script>
 
 <template>

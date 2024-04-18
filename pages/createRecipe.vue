@@ -136,6 +136,10 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  middleware: ['auth-index'],
+})
+
 const { chatCompletion } = useChatgpt()
 const recipeName = ref('');
 const generatedRecipe = ref('');
@@ -144,10 +148,7 @@ const errorMessage = ref('');
 const successMessage = ref('');
 const isLoading = ref(false);
 
-
-
 const generateRecipe = async () => {
-  
   if (recipeName.value.trim() !== '') {
     isLoading.value = true;
     try {
@@ -177,11 +178,12 @@ const generateRecipe = async () => {
           content: prompt,
         }
       ]
-      const response = await chatCompletion(chatTree, 'gpt-3.5-turbo-0301')
 
+      const response = await chatCompletion(chatTree, 'gpt-3.5-turbo-0301')
       const responseData = JSON.parse(response[0].message.content);
+
       generatedRecipe.value = responseData;
-      
+
       console.log('Rezeptvorschlag wurde generiert.')
       successMessage.value = 'AI Rezeptvorschlag wurde generiert.';
     } catch (error) {
@@ -215,14 +217,11 @@ const recipe = ref({
 
 const uploadedImage = ref(null);
 
-
 const allergies = ['Gluten', 'Nüsse', 'Laktose', 'Soja'];
 const categories = ['Frühstück', 'Mittagessen', 'Abendessen', 'Snack'];
 const types = ['Fleischhaltig','Vegetarisch'];
 const selectedAllergies = ref([]);
 const selectedCategories = ref([]);
-
-
 
 const addIngredient = () => {
   recipe.value.ingredients.push({ name: '', price: 0, quantity: 0});
@@ -275,10 +274,8 @@ const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 
 async function submitRecipeToSupabase(){
-  // Verwende eine Regular Expression, um alle Zahlen im String zu finden
   const proteinsExtract = generatedRecipe.value.Proteins.match(/\d+/g);
   const carbohydratesExtract = generatedRecipe.value.Carbohydrates.match(/\d+/g);
-
 
   const protein = proteinsExtract ? parseInt(proteinsExtract[0], 10) : null;
   const carbohydrates = carbohydratesExtract ? parseInt(carbohydratesExtract[0], 10) : null;
@@ -324,10 +321,6 @@ async function submitRecipeToSupabase(){
       errorMessage.value = error.message;
       }
 }
-definePageMeta({
-  middleware: ['auth-index'],
-})
-
 </script>
 
 <style scoped>

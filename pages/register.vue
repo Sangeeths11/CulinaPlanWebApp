@@ -1,4 +1,9 @@
 <script setup lang="ts">
+definePageMeta({
+  layout: 'non',
+  middleware: ['auth-index'],
+})
+
 const supabase = useSupabaseClient();
 const router = useRouter();
 
@@ -25,10 +30,6 @@ const register = async () => {
     router.push('/login');
   }
 };
-definePageMeta({
-  layout: 'non',
-  middleware: ['auth-index'],
-})
 </script>
 <template>
   <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">

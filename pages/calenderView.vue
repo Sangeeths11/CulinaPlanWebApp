@@ -27,12 +27,16 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  middleware: ['auth-index'],
+})
 
 const today = new Date();
 const showRecipeModal = ref(false);
 const assignedRecipes = ref({});
 const calendarAttributes = ref([]);
 const supabase = useSupabaseClient()
+const calenderStore = useCalenderStore();
 
 const assignRecipe = (date, recipe) => {
   console.log(date, recipe);
@@ -78,7 +82,7 @@ const fetchRecipeAssignments = async () => {
     console.error('Error fetching recipe assignments with joins:', error);
     return;
   }
-
+  
   const assignments = {};
   for (const item of data) {
     const { date, morning, lunch, evening, snack } = item;
@@ -92,7 +96,6 @@ const fetchRecipeAssignments = async () => {
   assignedRecipes.value = assignments;
   calenderUpdate();
 };
-
 
 const calenderUpdate = () => {
   const attributes = [];
@@ -119,7 +122,4 @@ const calenderUpdate = () => {
 onMounted(async () => {
   await fetchRecipeAssignments();
 });
-definePageMeta({
-  middleware: ['auth-index'],
-})
 </script>
