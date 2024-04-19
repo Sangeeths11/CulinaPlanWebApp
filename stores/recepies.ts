@@ -141,6 +141,45 @@ export const useRecipeStore = defineStore('recipeStore', () => {
       router.push({ path: "/overview" })
   };
 
+  const updateRecipe = async (recepieId, recipeDetails, ingredientsDetails) => {
+    const { data: recipeData, error: recipeError  } = await client
+      .from('recepies')
+      .update({
+        name: recipeDetails.name,
+        description: recipeDetails.description,
+        allergies: recipeDetails.allergies,
+        categories: recipeDetails.categories,
+        typ: recipeDetails.typ,
+        image_url: recipeDetails.image_url,
+        user_id: recipeDetails.user_id,
+        proteins: recipeDetails.proteins,
+        carbohydrates: recipeDetails.carbohydrates,
+        priceTotal: recipeDetails.priceTotal
+      })
+      .match({ id: recepieId });
+      
+      if (recipeError) throw recipeError;
+
+      const { error: deleteIngredientsError } = await client
+            .from('ingredients')
+            .delete()
+            .match({ recepie_id: recepieId });
+      if (deleteIngredientsError) throw deleteIngredientsError;
+      
+      const ingredientsWithRecipeId = ingredientsDetails.map(ingredient => ({
+        name: ingredient.name,
+        price: ingredient.price,
+        quantity: ingredient.quantity,
+        recepie_id: recepieId
+      }));
+      const { error: insertIngredientsError } = await client
+            .from('ingredients')
+            .insert(ingredientsWithRecipeId);
+      if (insertIngredientsError) throw insertIngredientsError;
+      console.log('Rezept erfolgreich aktualisiert.');
+      router.push({ path: "/overview" });
+  }
+
   return {
       calenderAssignments,
       currentRecipe,
@@ -151,6 +190,7 @@ export const useRecipeStore = defineStore('recipeStore', () => {
       fetchIngredients,
       fetchRecipes,
       deleteRecipe,
-      saveRecipe
+      saveRecipe,
+      updateRecipe
   };
 });

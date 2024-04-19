@@ -294,13 +294,12 @@ async function submitRecipeToSupabase(){
     priceTotal: calculateTotalCost.value
   }
   
-
   try {
     // Validation implementieren hier
     recipeStore.saveRecipe(recipeDetails, recipe.value.ingredients);
-      } catch (error) {
-      errorMessage.value = error.message;
-      }
+  } catch (error) {
+    errorMessage.value = error.message;
+  }
 }
 </script>
 

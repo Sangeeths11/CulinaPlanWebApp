@@ -1,7 +1,28 @@
 <template>
   <div class="min-h-screen bg-gray-100 p-4 md:p-10">
+    <div v-if="isLoading" class="fixed inset-0 bg-gray-600 bg-opacity-75 flex justify-center items-center z-50">
+      <div class="spinner-border animate-spin inline-block w-16 h-16 border-4 border-t-4 border-gray-200 rounded-full" role="status">
+        <span class="visually-hidden"></span>
+      </div>
+    </div>
     <h1 class="text-3xl font-bold mb-6">Rezept erstellen</h1>
     <form @submit.prevent="submitRecipeToSupabase" class="bg-white shadow-md rounded px-4 md:px-8 pt-6 pb-8 mb-4">
+      <div v-if="errorMessage" class="mb-4 w-full">
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+          <strong class="font-bold">
+            <Icon name="ic:round-error" class="w-5 h-5 inline-block" />
+          </strong>
+          <span class="block sm:inline pl-2">{{ errorMessage }}</span>
+        </div>
+      </div>
+      <div v-if="successMessage" class="mb-4 w-full">
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="info">
+          <strong class="font-bold">
+            <Icon name="ic:round-error" class="w-5 h-5 inline-block" />
+          </strong>
+          <span class="block sm:inline pl-2">{{ successMessage }}</span>
+        </div>
+      </div>
       <div v-if="uploadedImage" class="mb-4 flex justify-center items-center">
         <img :src="uploadedImage" class="max-w-full h-auto max-h-60" alt="Hochgeladenes Bild" style="object-fit: contain;">
       </div>
@@ -120,12 +141,16 @@ const recipeName = ref('');
 const generatedRecipe = ref('');
 const route = useRoute();
 const router = useRouter();
+const isLoading = ref(false);
 const recepieStore = useRecipeStore();
+const errorMessage = ref('');
+const successMessage = ref('');
 
 
 const generateRecipe = async () => {
   
   if (recipeName.value.trim() !== '') {
+    isLoading.value = true;
     try {
       const prompt = `
         Give me the recipe for ${recipeName.value}. Please make sure that you indicate the cost and quantity of each product. It is important that you give me this information in a nicely structured way.
@@ -154,13 +179,18 @@ const generateRecipe = async () => {
         }
       ]
       const response = await chatCompletion(chatTree, 'gpt-3.5-turbo-0301')
-
       const responseData = JSON.parse(response[0].message.content);
+      
       generatedRecipe.value = responseData;
       
       console.log('Rezeptvorschlag wurde generiert.')
+      successMessage.value = 'AI Rezeptvorschlag wurde generiert.';
     } catch (error) {
+      errorMessage.value = error.message;
       console.log('Fehler beim Generieren des Rezeptvorschlags: ' + error.message)
+    }finally{
+      isLoading.value = false;
+      console.log(generatedRecipe.value);
     }
   } else {
     console.log('Bitte geben Sie zuerst einen Rezeptnamen ein.')
@@ -247,40 +277,38 @@ const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 const recipeId = ref(route.params.id);
 async function submitRecipeToSupabase() {
+  console.log(generatedRecipe.value);
+  if (generatedRecipe.value) {
+    const proteinsExtract = generatedRecipe.value.Proteins.match(/\d+/g);
+    const carbohydratesExtract = generatedRecipe.value.Carbohydrates.match(/\d+/g);
+
+    const protein = proteinsExtract ? parseInt(proteinsExtract[0], 10) : null;
+    const carbohydrates = carbohydratesExtract ? parseInt(carbohydratesExtract[0], 10) : null;
+  }
+  else {
+    var protein = null;
+    var carbohydrates = null;
+  }
+
+  const recipeDetails = {
+    name: recipeName.value,
+    description: recipe.value.description,
+    allergies: selectedAllergies.value,
+    categories: selectedCategories.value,
+    typ: selectedTyp.value[0],
+    image_url: uploadedImage.value,
+    user_id: user.value.id,
+    priceTotal: calculateTotalCost.value
+  }
+  if (protein !== null) {
+    recipeDetails.proteins = protein;
+  }
+  if (carbohydrates !== null) {
+    recipeDetails.carbohydrates = carbohydrates;
+  }
     try {
-        const { error: recipeError } = await supabase
-            .from('recepies')
-            .update({
-                name: recipeName.value,
-                description: recipe.value.description,
-                allergies: selectedAllergies.value,
-                categories: selectedCategories.value,
-                typ: selectedTyp.value[0],
-                image_url: uploadedImage.value
-            })
-            .match({ id: recipeId.value });
-
-        if (recipeError) throw recipeError;
-
-        const { error: deleteIngredientsError } = await supabase
-            .from('ingredients')
-            .delete()
-            .match({ recepie_id: recipeId.value });
-
-        if (deleteIngredientsError) throw deleteIngredientsError;
-        const ingredientsWithRecipeId = recipe.value.ingredients.map(ingredient => ({
-            ...ingredient,
-            recepie_id: recipeId.value
-        }));
-
-        const { error: insertIngredientsError } = await supabase
-            .from('ingredients')
-            .insert(ingredientsWithRecipeId);
-
-        if (insertIngredientsError) throw insertIngredientsError;
-
-        console.log('Rezept erfolgreich aktualisiert.');
-        router.push({ path: "/overview" });
+      // Validation implement here
+      recepieStore.updateRecipe(recipeId.value, recipeDetails, recipe.value.ingredients);
     } catch (error) {
         console.error('Fehler beim Aktualisieren des Rezepts:', error);
     }
@@ -304,6 +332,7 @@ async function getIngredients(id){
   await recepieStore.fetchIngredients(id);
   console.log(recepieStore.currentIngredients);
   recipe.value.ingredients = recepieStore.currentIngredients
+  console.log("Ingredients: " + recipe.value.ingredients);
 }
 
 onMounted(() => {
@@ -314,4 +343,19 @@ onMounted(() => {
 </script>
 
 <style scoped>
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.spinner-border {
+  display: inline-block;
+  width: 4rem; 
+  height: 4rem; 
+  border-width: 0.5rem;
+  border-color: rgba(255, 255, 255, 0.5);
+  border-top-color: #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
 </style>

@@ -2,19 +2,19 @@
   <div>
     <div v-show="showSideNav" class="fixed inset-0 bg-gray-600 bg-opacity-50 z-50" @click="toggleSideNav"></div>
     <div v-show="showSideNav" class="fixed inset-y-0 left-0 bg-white shadow-md z-50 w-64 flex flex-col py-4 transform transition-transform duration-300" :class="{ '-translate-x-full': !showSideNav }">
-      <router-link to="/" class="px-6 py-3 text-lg font-semibold flex items-center space-x-4 hover:bg-gray-100">
+      <router-link to="/" class="px-6 py-3 text-lg font-semibold flex items-center space-x-4 hover:bg-gray-100" @click="closeSideNavIfOpen">
         <Icon name="material-symbols:home-outline" class="h-6 w-6 text-blue-500" />
         <p>Home</p>
       </router-link>
-      <router-link to="/overview" class="px-6 py-3 text-lg font-semibold flex items-center space-x-4 hover:bg-gray-100">
+      <router-link to="/overview" class="px-6 py-3 text-lg font-semibold flex items-center space-x-4 hover:bg-gray-100" @click="closeSideNavIfOpen">
         <Icon name="material-symbols:overview-key-outline" class="h-6 w-6 text-blue-500" />
         <p>Overview</p>
       </router-link>
-      <router-link to="/dashboard" class="px-6 py-3 text-lg font-semibold flex items-center space-x-4 hover:bg-gray-100">
+      <router-link to="/dashboard" class="px-6 py-3 text-lg font-semibold flex items-center space-x-4 hover:bg-gray-100" @click="closeSideNavIfOpen">
         <Icon name="material-symbols:dashboard-outline" class="h-6 w-6 text-blue-500" />
         <p>Dashboard</p>
       </router-link>
-      <router-link to="/calenderView" class="px-6 py-3 text-lg font-semibold flex items-center space-x-4 hover:bg-gray-100">
+      <router-link to="/calenderView" class="px-6 py-3 text-lg font-semibold flex items-center space-x-4 hover:bg-gray-100" @click="closeSideNavIfOpen">
         <Icon name="uil:calender" class="h-6 w-6 text-blue-500" />
         <p>Kalender</p>
       </router-link>
@@ -50,6 +50,12 @@ const router = useRouter()
 const user = useSupabaseUser()
 const supabase = useSupabaseClient()
 
+function closeSideNavIfOpen() {
+  if (showSideNav.value) {
+    showSideNav.value = false;
+  }
+}
+
 function toggleSideNav() {
   showSideNav.value = !showSideNav.value
 }
@@ -65,5 +71,4 @@ function toggleLogoutPopup() {
 </script>
 
 <style>
-/* Globale Stile oder spezifische Layout-Stile */
 </style>
