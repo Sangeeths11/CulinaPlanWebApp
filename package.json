@@ -27,7 +27,7 @@
     "@samk-dev/nuxt-vcalendar": "^1.0.3",
     "@vue/test-utils": "^2.4.5",
     "autoprefixer": "^10.4.19",
-    "cypress": "^13.7.3",
+    "cypress": "^13.8.0",
     "happy-dom": "^14.7.1",
     "nuxt-chatgpt": "^0.2.3",
     "nuxt-icon": "^0.6.10",
