@@ -1,80 +1,52 @@
 <script setup lang="ts">
-const supabase = useSupabaseClient()
-const router = useRouter()
-const errorMessage = ref('');
+import ErrorMessageBox from '~/components/login/ErrorMessageBox.vue';
+import InputField from '~/components/login/InputField.vue';
+
 definePageMeta({
   middleware: ['auth-index'],
   layout: 'non',
 })
 
+const supabase = useSupabaseClient()
+const router = useRouter()
+const { signIn, errorMessage } = useAuth()
 const email = ref('')
 const password = ref('')
 
-const login = async () => {
-  const { error } = await supabase.auth.signInWithPassword(
-    {
-        email: email.value,
-        password: password.value,
-    });
-    if (error) {
-      errorMessage.value = error.message;
-    } else {
-      errorMessage.value = ''
-      router.push('/overview');
-    }
-}
+const handleLogin = async () => {
+  await signIn(email.value, password.value);
+};
 </script>
 
 <template>
   <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-
     <div class="bg-white p-6 rounded shadow-md w-full max-w-md">
-      <div v-if="errorMessage" class="mb-4 w-full">
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-          <strong class="font-bold">
-            <Icon name="ic:round-error" class="w-5 h-5 inline-block" />
-          </strong>
-          <span class="block sm:inline pl-2">{{ errorMessage }}</span>
-        </div>
-      </div>
+      <ErrorMessageBox :message="errorMessage" />
       <h1 class="text-2xl md:text-3xl font-bold mb-4 text-center">Login</h1>
       <div class="flex items-center justify-center mb-6">
-        <img 
-        src="assets/spoon.png"
-        alt="Logo"
-        class="w-16 h-16 rounded-full">
+        <img src="assets/spoon.png" alt="Logo" class="w-16 h-16 rounded-full">
       </div>
-      <form @submit.prevent="login" class="flex flex-col items-center">
+      <form @submit.prevent="handleLogin" class="flex flex-col items-center">
+        <InputField 
+          label="Email" 
+          id="email" 
+          type="email" 
+          placeholder="Email" 
+          iconName="ic:baseline-email" 
+          :modelValue="email" 
+          @update:modelValue="value => email = value"
+        />
+        <InputField 
+          label="Password" 
+          id="password" 
+          type="password" 
+          placeholder="******************" 
+          iconName="carbon:password" 
+          :modelValue="password" 
+          @update:modelValue="value => password = value"
+        />
         <div class="mb-4 w-full">
-          <label 
-          class="block text-gray-700 text-sm font-bold mb-2" 
-          for="email">
-            Email
-          </label>
-          <div class="flex items-center relative">
-            <Icon name="ic:baseline-email" class="absolute left-3 w-5 h-5 text-gray-400" />
-            <input 
-            class="shadow appearance-none border rounded w-full py-2 pl-10 pr-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-            id="email" 
-            type="email" 
-            placeholder="Email" 
-            v-model="email">
-          </div>
-        </div>
-        <div class="mb-6 w-full">
-          <label class="block text-gray-700 text-sm font-bold mb-2" for="password">Password</label>
-          <div class="flex items-center relative">
-            <Icon name="carbon:password" class="absolute left-3 w-5 h-5 text-gray-400" style="top: 40%; transform: translateY(-50%);" />
-            <input 
-            class="shadow appearance-none border rounded w-full py-2 pl-10 pr-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" 
-            id="password" 
-            type="password" 
-            placeholder="******************" 
-            v-model="password">
-          </div>
-        </div>
-        <div class="mb-4 w-full">
-          <LoginSubmitButton/>
+          <LoginSubmitButton />
         </div>
         <div class="flex flex-col items-center md:flex-row w-full justify-center">
           <span class="text-gray-600 text-sm">
@@ -88,7 +60,6 @@ const login = async () => {
     </div>
   </div>
 </template>
-
 
 <style>
 
