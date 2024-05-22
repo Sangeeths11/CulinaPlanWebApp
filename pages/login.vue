@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import ErrorMessageBox from '~/components/login/ErrorMessageBox.vue';
 import InputField from '~/components/login/InputField.vue';
+import LoginSubmitButton from '~/components/login/LoginSubmitButton.vue';
 
 definePageMeta({
   middleware: ['auth-index'],

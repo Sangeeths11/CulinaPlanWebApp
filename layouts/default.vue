@@ -26,7 +26,7 @@
       </button>
       
       <div class="flex items-center space-x-2">
-        <span class="text-gray-600">{{ user.email }}</span>
+        <span class="text-gray-600">{{ user?.email ?? 'No email provided' }}</span>
         <img src="assets/spoon.png" alt="Profil" class="h-10 w-10 rounded-full" @click="toggleLogoutPopup">
       </div>
     </div>
