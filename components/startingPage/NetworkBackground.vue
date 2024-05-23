@@ -17,6 +17,7 @@
 
 
 <script lang="ts">
+
 interface Node {
   x: number;
   y: number;
