@@ -136,14 +136,14 @@ const updateCalendarAssignmentsChart = () => {
         plotOptions: {
           bar: {
             borderRadius: 4,
-            horizontal: false, // oder false, je nachdem, wie Sie es möchten
+            horizontal: false,
           }
         },
         xaxis: {
           categories: dates,
         },
         dataLabels: {
-          enabled: false // Stellt sicher, dass Datenbeschriftungen global deaktiviert sind
+          enabled: false
         },
       },
       series: [
