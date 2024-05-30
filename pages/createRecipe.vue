@@ -7,22 +7,8 @@
     </div>
     <h1 class="text-3xl font-bold mb-6">Rezept erstellen</h1>
     <form @submit.prevent="submitRecipeToSupabase" class="bg-white shadow-md rounded px-4 md:px-8 pt-6 pb-8 mb-4">
-      <div v-if="errorMessage" class="mb-4 w-full">
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-          <strong class="font-bold">
-            <Icon name="ic:round-error" class="w-5 h-5 inline-block" />
-          </strong>
-          <span class="block sm:inline pl-2">{{ errorMessage }}</span>
-        </div>
-      </div>
-      <div v-if="successMessage" class="mb-4 w-full">
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="info">
-          <strong class="font-bold">
-            <Icon name="ic:round-error" class="w-5 h-5 inline-block" />
-          </strong>
-          <span class="block sm:inline pl-2">{{ successMessage }}</span>
-        </div>
-      </div>
+      <AlertMessage v-if="errorMessage" :message="errorMessage" type="error" class="mb-5" />
+      <AlertMessage v-if="successMessage" :message="successMessage" type="success" class="mb-5"/>
       <div v-if="uploadedImage" class="mb-4 flex justify-center items-center">
         <img :src="uploadedImage" class="max-w-full h-auto max-h-60" alt="Hochgeladenes Bild" style="object-fit: contain;">
       </div>
@@ -280,33 +266,37 @@ const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 
 async function submitRecipeToSupabase(){
-  const proteinsExtract = generatedRecipe.value.Proteins.match(/\d+/g);
-  const carbohydratesExtract = generatedRecipe.value.Carbohydrates.match(/\d+/g);
+  try{
+    const proteinsExtract = generatedRecipe.value.Proteins.match(/\d+/g);
+    const carbohydratesExtract = generatedRecipe.value.Carbohydrates.match(/\d+/g);
 
-  const protein = proteinsExtract ? parseInt(proteinsExtract[0], 10) : null;
-  const carbohydrates = carbohydratesExtract ? parseInt(carbohydratesExtract[0], 10) : null;
+    const protein = proteinsExtract ? parseInt(proteinsExtract[0], 10) : null;
+    const carbohydrates = carbohydratesExtract ? parseInt(carbohydratesExtract[0], 10) : null;
 
-  const recipeDetails = {
-    name: recipeName.value,
-    description: recipe.value.description,
-    allergies: selectedAllergies.value,
-    categories: selectedCategories.value,
-    typ: selectedTyp.value[0],
-    image_url: uploadedImage.value,
-    user_id: user.value.id,
-    proteins: protein,
-    carbohydrates: carbohydrates,
-    priceTotal: calculateTotalCost.value
-  }
-  
-  try {
-    if (recipeDetails.name === '') {
-      errorMessage.value = 'Bitte geben Sie einen Rezeptnamen ein.';
-      return;
+    const recipeDetails = {
+      name: recipeName.value,
+      description: recipe.value.description,
+      allergies: selectedAllergies.value,
+      categories: selectedCategories.value,
+      typ: selectedTyp.value[0],
+      image_url: uploadedImage.value,
+      user_id: user.value.id,
+      proteins: protein,
+      carbohydrates: carbohydrates,
+      priceTotal: calculateTotalCost.value
     }
-    recipeStore.saveRecipe(recipeDetails, recipe.value.ingredients);
+    
+    try {
+      if (recipeDetails.name === '') {
+        errorMessage.value = 'Bitte geben Sie einen Rezeptnamen ein.';
+        return;
+      }
+      recipeStore.saveRecipe(recipeDetails, recipe.value.ingredients);
+    } catch (error) {
+      errorMessage.value = error.message;
+    }
   } catch (error) {
-    errorMessage.value = error.message;
+    errorMessage.value = 'Bitte generieren Sie zuerst ein Rezept.';
   }
 }
 </script>
