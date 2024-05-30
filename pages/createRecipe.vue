@@ -189,6 +189,7 @@ const generateRecipe = async () => {
       console.log('Rezeptvorschlag wurde generiert.')
       successMessage.value = 'AI Rezeptvorschlag wurde generiert.';
     } catch (error) {
+      generateRecipe()
       errorMessage.value = error.message;
       console.log('Fehler beim Generieren des Rezeptvorschlags: ' + error.message)
     }finally {
@@ -299,7 +300,10 @@ async function submitRecipeToSupabase(){
   }
   
   try {
-    // Validation implementieren hier
+    if (recipeDetails.name === '') {
+      errorMessage.value = 'Bitte geben Sie einen Rezeptnamen ein.';
+      return;
+    }
     recipeStore.saveRecipe(recipeDetails, recipe.value.ingredients);
   } catch (error) {
     errorMessage.value = error.message;
