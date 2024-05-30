@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import ErrorMessageBox from '~/components/authComp/ErrorMessageBox.vue';
-import InputField from '~/components/authComp/InputField.vue';
-import SubmitButton from '~/components/authComp/SubmitButton.vue';
 
 definePageMeta({
   layout: 'non',
@@ -37,13 +34,13 @@ const register = async () => {
 <template>
   <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
     <div class="bg-white p-6 rounded shadow-md w-full max-w-md">
-      <ErrorMessageBox :message="errorMessage" />
+      <AuthCompErrorMessageBox :message="errorMessage" />
       <h1 class="text-2xl md:text-3xl font-bold mb-4 text-center">Sign Up</h1>
       <div class="flex items-center justify-center mb-6">
         <img src="assets/spoon.png" alt="Logo" class="w-16 h-16 rounded-full">
       </div>
       <form @submit.prevent="register" class="flex flex-col items-center">
-        <InputField
+        <AuthCompInputField
           label="Email"
           id="email"
           type="email"
@@ -52,7 +49,7 @@ const register = async () => {
           :modelValue="email"
           @update:modelValue="value => email = value"
         />
-        <InputField
+        <AuthCompInputField
           label="Password"
           id="password"
           type="password"
@@ -61,7 +58,7 @@ const register = async () => {
           :modelValue="password"
           @update:modelValue="value => password = value"
         />
-        <InputField
+        <AuthCompInputField
           label="Confirm Password"
           id="confirm_password"
           type="password"
@@ -71,7 +68,7 @@ const register = async () => {
           @update:modelValue="value => confirmPassword = value"
         />
         <div class="mb-4 w-full">
-          <SubmitButton>Sign Up</SubmitButton>
+          <AuthCompSubmitButton>Sign Up</AuthCompSubmitButton>
         </div>
         <div class="flex flex-col items-center md:flex-row w-full justify-center">
           <span class="text-gray-600 text-sm">Already have an account?</span>

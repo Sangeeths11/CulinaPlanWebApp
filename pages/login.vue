@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import ErrorMessageBox from '~/components/authComp/ErrorMessageBox.vue';
-import InputField from '~/components/authComp/InputField.vue';
-import LoginSubmitButton from '~/components/authComp/LoginSubmitButton.vue';
 
 definePageMeta({
   middleware: ['auth-index'],
@@ -22,13 +19,13 @@ const handleLogin = async () => {
 <template>
   <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
     <div class="bg-white p-6 rounded shadow-md w-full max-w-md">
-      <ErrorMessageBox :message="errorMessage" />
+      <AuthCompErrorMessageBox :message="errorMessage" />
       <h1 class="text-2xl md:text-3xl font-bold mb-4 text-center">Login</h1>
       <div class="flex items-center justify-center mb-6">
         <img src="assets/spoon.png" alt="Logo" class="w-16 h-16 rounded-full">
       </div>
       <form @submit.prevent="handleLogin" class="flex flex-col items-center">
-        <InputField 
+        <AuthCompInputField 
           label="Email" 
           id="email" 
           type="email" 
@@ -37,7 +34,7 @@ const handleLogin = async () => {
           :modelValue="email" 
           @update:modelValue="value => email = value"
         />
-        <InputField 
+        <AuthCompInputField 
           label="Password" 
           id="password" 
           type="password" 
@@ -47,7 +44,7 @@ const handleLogin = async () => {
           @update:modelValue="value => password = value"
         />
         <div class="mb-4 w-full">
-          <LoginSubmitButton />
+          <AuthCompLoginSubmitButton />
         </div>
         <div class="flex flex-col items-center md:flex-row w-full justify-center">
           <span class="text-gray-600 text-sm">
