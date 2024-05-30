@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import NetworkBackground from '~/components/startingPage/NetworkBackground.vue';
 
 definePageMeta({
   middleware: ['auth-index'],
@@ -10,7 +9,7 @@ definePageMeta({
 
 <template>
   <div>
-    <NetworkBackground/>
+    <StartingPageNetworkBackground/>
   </div>
 </template>
 
