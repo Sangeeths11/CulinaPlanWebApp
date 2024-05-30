@@ -12,20 +12,7 @@
       <div v-if="uploadedImage" class="mb-4 flex justify-center items-center">
         <img :src="uploadedImage" class="max-w-full h-auto max-h-60" alt="Hochgeladenes Bild" style="object-fit: contain;">
       </div>
-      <div class="mb-4">
-        <div class="flex items-center justify-center w-full">
-            <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800  hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                    <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
-                    </svg>
-                    <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
-                </div>
-                <input type="file" id="dropzone-file" @change="handleImageUpload" class="hidden" accept="image/*">
-            </label>
-        </div> 
-      </div>
+      <ImageUploader @image-uploaded="handleImageUpload" />
       <div class="mb-4">
         <label for="recipeName" class="block text-gray-700 text-sm font-bold mb-2">Rezeptname</label>
         <input type="text" id="recipeName" v-model="recipeName" @blur="generateRecipe" placeholder="Geben Sie einen Rezeptnamen ein und verlassen sie dieses Feld damit die AI ihnen die Zutaten vorschlagen kann" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
@@ -227,32 +214,24 @@ const calculateTotalCost = computed(() => {
   return recipe.value.ingredients.reduce((total, ingredient) => total + (ingredient.price * ingredient.quantity), 0);
 });
 
-
-const handleImageUpload = async (event) => {
-  const file = event.target.files[0];
-  if (file) {
+async function handleImageUpload(file) {
+  try {
     const uniqueFileName = `recipes/${Date.now()}-${file.name}`;
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from('image')
       .upload(uniqueFileName, file);
 
     if (uploadError) {
-      errorMessage.value = uploadError.message;
-      return;
+      throw new Error(uploadError.message);
     }
-    else {
-      //TODO: backend call to save image problem in Supabase waiting for the fix
-      // self constructed url to solve the problem
-      //#Welcome to Frontend Development
-      const url = `https://${
-        import.meta.env.VITE_SUPABASE_BUCKET
-      }${uniqueFileName}`;
-      console.log('Image uploaded:', url);
-      uploadedImage.value = url;
-      recipe.value.image = uniqueFileName;
-    }
+
+    uploadedImage.value = `https://${import.meta.env.VITE_SUPABASE_BUCKET}${uniqueFileName}`;
+    recipe.value.image = uniqueFileName;
+  } catch (error) {
+    errorMessage.value = error.message;
+    console.error('Upload failed:', error);
   }
-};
+}
 
 const handleNutritionTypeChange = (selectedType) => {
   if (selectedType === 'Fleischhaltig') {
