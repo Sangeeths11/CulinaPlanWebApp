@@ -13,74 +13,33 @@
         <img :src="uploadedImage" class="max-w-full h-auto max-h-60" alt="Hochgeladenes Bild" style="object-fit: contain;">
       </div>
       <ImageUploader @image-uploaded="handleImageUpload" />
-      <div class="mb-4">
-        <label for="recipeName" class="block text-gray-700 text-sm font-bold mb-2">Rezeptname</label>
-        <input type="text" id="recipeName" v-model="recipeName" @blur="generateRecipe" placeholder="Geben Sie einen Rezeptnamen ein und verlassen sie dieses Feld damit die AI ihnen die Zutaten vorschlagen kann" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-      </div>
-      <div class="mb-4">
-        <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
-          Beschreibung
-        </label>
-        <textarea id="description" v-model="recipe.description" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"></textarea>
-      </div>
+      <TextInput id="recipeName" label="Rezeptname" v-model="recipeName" placeholder="Geben Sie einen Rezeptnamen ein..." @blur="generateRecipe" />
+      <TextAreaInput id="description" label="Beschreibung" v-model="recipe.description" />
+
       <div class="flex flex-wrap -mx-2">
-        <div class="w-full px-2">
-          <div class="flex flex-wrap -m-2">
-            <div class="w-full md:w-1/2 lg:w-1/3 px-2 mb-4">
-              <label class="block text-gray-700 text-sm font-bold mb-2">
-                Allergien
-              </label>
-              <div class="flex flex-wrap">
-                <div v-for="(allergy, index) in allergies" :key="index" class="w-1/2 mb-2">
-                  <input type="checkbox" :id="'allergy-' + index" v-model="selectedAllergies" :value="allergy">
-                  <label :for="'allergy-' + index" class="text-gray-700 ml-2">{{ allergy }}</label>
-                </div>
-              </div>
-            </div>
-            <div class="w-full md:w-1/2 lg:w-1/3 px-2">
-              <label class="block text-gray-700 text-sm font-bold mb-2">
-                Kategorien
-              </label>
-              <div class="flex flex-wrap">
-                <div v-for="(category, index) in categories" :key="index" class="w-1/2 mb-2">
-                  <input type="checkbox" :id="'category-' + index" v-model="selectedCategories" :value="category">
-                  <label :for="'category-' + index" class="text-gray-700 ml-2">{{ category }}</label>
-                </div>
-              </div>
-            </div>
-            <div class="w-full md:w-1/2 lg:w-1/3 px-2">
-              <label class="block text-gray-700 text-sm font-bold mb-2">
-                Ernährungstyp
-              </label>
-              <div class="flex flex-wrap">
-                <div v-for="(typ, index) in types" :key="index" class="w-1/2 mb-2">
-                  <input type="checkbox" :id="'category-' + index" v-model="selectedTyp" :value="typ" @change="handleNutritionTypeChange(typ)">
-                  <label :for="'typ-' + index" class="text-gray-700 ml-2">{{ typ }}</label>
-                </div>
-              </div>
-            </div>
+        <ChecklistSelector label="Allergien" :items="allergies" v-model:selectedValues="selectedAllergies" idPrefix="allergy" />
+        <ChecklistSelector label="Kategorien" :items="categories" v-model:selectedValues="selectedCategories" idPrefix="category" />
+        <ChecklistSelector label="Ernährungstyp" :items="types" v-model:selectedValues="selectedTyp" idPrefix="type" :singleSelection="true" />
+      </div>
+      <div class="w-full px-2 mb-4 md:mb-0">
+        <label class="block text-gray-700 text-sm font-bold mb-2">
+          Einkaufsliste Zutaten
+        </label>
+        <div v-for="(ingredient, index) in recipe.ingredients" :key="index" class="flex flex-wrap items-center mb-2">
+          <input type="text" v-model="ingredient.name" placeholder="Zutat" class="border rounded py-2 px-3 text-gray-700 mr-2 mb-2 flex-grow w-full md:w-auto">
+          <input type="number" v-model="ingredient.quantity" placeholder="Anzahl" class="border rounded py-2 px-3 text-gray-700 mr-2 mb-2 flex-grow w-full md:w-auto">
+          <input type="number" step="0.01" v-model="ingredient.price" placeholder="Preis (CHF)" class="border rounded py-2 px-3 text-gray-700 mr-2 mb-2 flex-grow w-full md:w-auto">
+          <div class="flex space-x-1 mb-2 w-full md:w-auto">
+            <button type="button" @click="removeIngredient(index)" class="flex justify-center items-center h-10 w-full md:w-10 bg-red-500 text-white rounded">
+              <Icon name="pajamas:remove" class="h-6 w-6" />
+            </button>
+            <button type="button" @click="addIngredient" class="flex justify-center items-center h-10 w-full md:w-10 bg-green-500 text-white rounded">
+              <Icon name="material-symbols:add" class="h-6 w-6" />
+            </button>
           </div>
         </div>
-        <div class="w-full px-2 mb-4 md:mb-0">
-          <label class="block text-gray-700 text-sm font-bold mb-2">
-            Einkaufsliste Zutaten
-          </label>
-          <div v-for="(ingredient, index) in recipe.ingredients" :key="index" class="flex flex-wrap items-center mb-2">
-            <input type="text" v-model="ingredient.name" placeholder="Zutat" class="border rounded py-2 px-3 text-gray-700 mr-2 mb-2 flex-grow w-full md:w-auto">
-            <input type="number" v-model="ingredient.quantity" placeholder="Anzahl" class="border rounded py-2 px-3 text-gray-700 mr-2 mb-2 flex-grow w-full md:w-auto">
-            <input type="number" step="0.01" v-model="ingredient.price" placeholder="Preis (CHF)" class="border rounded py-2 px-3 text-gray-700 mr-2 mb-2 flex-grow w-full md:w-auto">
-            <div class="flex space-x-1 mb-2 w-full md:w-auto">
-              <button type="button" @click="removeIngredient(index)" class="flex justify-center items-center h-10 w-full md:w-10 bg-red-500 text-white rounded">
-                <Icon name="pajamas:remove" class="h-6 w-6" />
-              </button>
-              <button type="button" @click="addIngredient" class="flex justify-center items-center h-10 w-full md:w-10 bg-green-500 text-white rounded">
-                <Icon name="material-symbols:add" class="h-6 w-6" />
-              </button>
-            </div>
-          </div>
-          <div class="mb-6">
-            <p class="text-gray-700 text-sm font-bold">Gesamtkosten: {{ calculateTotalCost.toFixed(2) }} CHF</p>
-          </div>
+        <div class="mb-6">
+          <p class="text-gray-700 text-sm font-bold">Gesamtkosten: {{ calculateTotalCost.toFixed(2) }} CHF</p>
         </div>
       </div>
       <div class="flex items-center justify-between mt-6">
@@ -232,14 +191,6 @@ async function handleImageUpload(file) {
     console.error('Upload failed:', error);
   }
 }
-
-const handleNutritionTypeChange = (selectedType) => {
-  if (selectedType === 'Fleischhaltig') {
-    selectedTyp.value = ['Fleischhaltig'];
-  } else if (selectedType === 'Vegetarisch') {
-    selectedTyp.value = ['Vegetarisch'];
-  }
-};
 
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
