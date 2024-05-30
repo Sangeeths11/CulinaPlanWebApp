@@ -37,6 +37,7 @@
 <script setup lang="ts">
 definePageMeta({
   middleware: ['auth-index'],
+  layout: 'nav',
 })
 
 const today = new Date();

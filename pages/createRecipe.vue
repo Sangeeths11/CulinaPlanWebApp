@@ -138,6 +138,7 @@
 <script setup lang="ts">
 definePageMeta({
   middleware: ['auth-index'],
+  layout: 'nav',
 })
 
 const { chatCompletion } = useChatgpt()

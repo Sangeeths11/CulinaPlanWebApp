@@ -2,7 +2,6 @@
 
 definePageMeta({
   middleware: ['auth-index'],
-  layout: 'non',
   title: 'CulinaWebApp - Home',
 })
 </script>

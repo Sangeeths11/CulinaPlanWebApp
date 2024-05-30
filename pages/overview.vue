@@ -2,7 +2,7 @@
 definePageMeta({
   title: 'Rezepte Übersicht',
   middleware: ['auth-index'],
-  layout: 'default',
+  layout: 'nav',
 });
 
 const supabase = useSupabaseClient()
