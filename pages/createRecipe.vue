@@ -255,6 +255,7 @@ const handleImageUpload = async (event) => {
     else {
       //TODO: backend call to save image problem in Supabase waiting for the fix
       // self constructed url to solve the problem
+      //#Welcome to Frontend Development
       const url = `https://${
         import.meta.env.VITE_SUPABASE_BUCKET
       }${uniqueFileName}`;
