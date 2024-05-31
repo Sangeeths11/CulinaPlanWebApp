@@ -1,9 +1,7 @@
 <template>
   <div class="min-h-screen bg-gray-100 p-4 md:p-10">
     <div v-if="isLoading" class="fixed inset-0 bg-gray-600 bg-opacity-75 flex justify-center items-center z-50">
-      <div class="spinner-border animate-spin inline-block w-16 h-16 border-4 border-t-4 border-gray-200 rounded-full" role="status">
-        <span class="visually-hidden"></span>
-      </div>
+      <LoadingSpinner />
     </div>
     <h1 class="text-3xl font-bold mb-6">Rezept erstellen</h1>
     <form @submit.prevent="submitRecipeToSupabase" class="bg-white shadow-md rounded px-4 md:px-8 pt-6 pb-8 mb-4">
@@ -42,19 +40,8 @@
     </form>
     <div v-if="generatedRecipe" class="bg-white p-5 rounded-lg shadow">
       <h2 class="text-2xl font-bold mb-2">AI generierter Rezept zu {{ generatedRecipe.name }}</h2>
-      <div v-if="generatedRecipe.Proteins || generatedRecipe.Carbohydrates">
-        <h3 class="font-semibold">Nährwerte:</h3>
-        <p v-if="generatedRecipe.Proteins">Proteine: {{ generatedRecipe.Proteins }}</p>
-        <p v-if="generatedRecipe.Carbohydrates">Kohlenhydrate: {{ generatedRecipe.Carbohydrates }}</p>
-      </div>
-      <div v-if="generatedRecipe.ingredients && generatedRecipe.ingredients.length > 0">
-        <h3 class="font-semibold mt-4 mb-2">Zutaten:</h3>
-        <ul>
-          <li v-for="(ingredient, index) in generatedRecipe.ingredients" :key="index">
-            {{ ingredient.name }} - {{ ingredient.amount }} ({{ ingredient.cost }})
-          </li>
-        </ul>
-      </div>
+      <NutritionFacts :proteins="generatedRecipe.Proteins" :carbohydrates="generatedRecipe.Carbohydrates" />
+      <IngredientsList :ingredients="generatedRecipe.ingredients" />
     </div>
   </div>
 </template>
