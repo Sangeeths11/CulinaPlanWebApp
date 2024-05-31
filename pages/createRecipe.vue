@@ -25,18 +25,10 @@
         <label class="block text-gray-700 text-sm font-bold mb-2">
           Einkaufsliste Zutaten
         </label>
-        <div v-for="(ingredient, index) in recipe.ingredients" :key="index" class="flex flex-wrap items-center mb-2">
-          <input type="text" v-model="ingredient.name" placeholder="Zutat" class="border rounded py-2 px-3 text-gray-700 mr-2 mb-2 flex-grow w-full md:w-auto">
-          <input type="number" v-model="ingredient.quantity" placeholder="Anzahl" class="border rounded py-2 px-3 text-gray-700 mr-2 mb-2 flex-grow w-full md:w-auto">
-          <input type="number" step="0.01" v-model="ingredient.price" placeholder="Preis (CHF)" class="border rounded py-2 px-3 text-gray-700 mr-2 mb-2 flex-grow w-full md:w-auto">
-          <div class="flex space-x-1 mb-2 w-full md:w-auto">
-            <button type="button" @click="removeIngredient(index)" class="flex justify-center items-center h-10 w-full md:w-10 bg-red-500 text-white rounded">
-              <Icon name="pajamas:remove" class="h-6 w-6" />
-            </button>
-            <button type="button" @click="addIngredient" class="flex justify-center items-center h-10 w-full md:w-10 bg-green-500 text-white rounded">
-              <Icon name="material-symbols:add" class="h-6 w-6" />
-            </button>
-          </div>
+        <div v-for="(ingredient, index) in recipe.ingredients" :key="index">
+          <IngredientItem :ingredient="ingredient" :index="index" 
+                          @remove-ingredient="removeIngredient"
+                          @add-ingredient="addIngredient"/>
         </div>
         <div class="mb-6">
           <p class="text-gray-700 text-sm font-bold">Gesamtkosten: {{ calculateTotalCost.toFixed(2) }} CHF</p>
@@ -159,7 +151,7 @@ const selectedAllergies = ref([]);
 const selectedCategories = ref([]);
 
 const addIngredient = () => {
-  recipe.value.ingredients.push({ name: '', price: 0, quantity: 0});
+  recipe.value.ingredients.push({ name: '', price: 0, quantity: 1});
 };
 
 const removeIngredient = (index: number) => {

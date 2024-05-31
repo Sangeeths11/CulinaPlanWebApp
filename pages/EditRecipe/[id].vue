@@ -5,7 +5,7 @@
         <span class="visually-hidden"></span>
       </div>
     </div>
-    <h1 class="text-3xl font-bold mb-6">Rezept erstellen</h1>
+    <h1 class="text-3xl font-bold mb-6">Rezept bearbeiten</h1>
     <form @submit.prevent="submitRecipeToSupabase" class="bg-white shadow-md rounded px-4 md:px-8 pt-6 pb-8 mb-4">
       <div v-if="errorMessage" class="mb-4 w-full">
         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
@@ -136,6 +136,11 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  middleware: ['auth-index'],
+  layout: 'nav',
+})
+
 const { chatCompletion } = useChatgpt()
 const recipeName = ref('');
 const generatedRecipe = ref('');
