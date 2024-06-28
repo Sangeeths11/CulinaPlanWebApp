@@ -8,9 +8,9 @@ describe('template spec', () => {
     /* ==== Generated with Cypress Studio ==== */
     cy.visit('http://localhost:3000/login');
     cy.get('#email').clear('c');
-    cy.get('#email').type('c.sangeeths@gmail.com');
+    cy.get('#email').type('c.test@gmail.com');
     cy.get('#password').clear();
-    cy.get('#password').type('Sahana15!');
+    cy.get('#password').type('test!');
     cy.get('.bg-blue-500').click();
     cy.get('.text-3xl').click();
     cy.get('.text-3xl').should('have.text', 'Rezepte Übersicht');
