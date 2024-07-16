@@ -1,8 +1,23 @@
-# Nuxt 3 Minimal Starter
+
+# CulinaPlanWebApp
+
+## Overview
+
+**CulinaPlanWebApp** is a comprehensive web application designed to help users plan their culinary activities efficiently. This project leverages modern web technologies to provide a seamless and user-friendly experience for recipe management, meal planning, and grocery list generation.
+
+## Features
+
+- **Recipe Management**: Easily add, edit, and organize your recipes.
+- **Meal Planning**: Plan your meals for the week with a simple and intuitive interface.
+- **Grocery List Generation**: Automatically generate grocery lists based on your meal plans.
+- **User Authentication**: Secure user login and registration system.
+- **Responsive Design**: Optimized for both desktop and mobile devices.
+
+## Nuxt 3 Minimal Starter
 
 Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
-## Setup
+### Setup
 
 Make sure to install the dependencies:
 
@@ -20,7 +35,7 @@ yarn install
 bun install
 ```
 
-## Development Server
+### Development Server
 
 Start the development server on `http://localhost:3000`:
 
@@ -38,7 +53,7 @@ yarn dev
 bun run dev
 ```
 
-## Production
+### Production
 
 Build the application for production:
 
