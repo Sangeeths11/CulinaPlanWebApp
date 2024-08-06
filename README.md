@@ -15,6 +15,7 @@
 - **Grocery List Generation**: Automatically generate grocery lists based on your meal plans.
 - **User Authentication**: Secure user login and registration system.
 - **Responsive Design**: Optimized for both desktop and mobile devices.
+- **AI Suggestion**: Giving good Recepies with price and kcal value.
 
 ## Nuxt 3 Minimal Starter
 
