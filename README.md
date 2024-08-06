@@ -5,6 +5,9 @@
 
 **CulinaPlanWebApp** is a comprehensive web application designed to help users plan their culinary activities efficiently. This project leverages modern web technologies to provide a seamless and user-friendly experience for recipe management, meal planning, and grocery list generation.
 
+![grafik](https://github.com/user-attachments/assets/c539e38c-e6d8-444e-9770-7b403f747f75)
+
+
 ## Features
 
 - **Recipe Management**: Easily add, edit, and organize your recipes.
